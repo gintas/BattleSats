@@ -22,7 +22,6 @@ public class BattleSats extends Activity {
 	/** How many pixels to drag onscreen to give a flier a velocity of 1 */
 	public static final float DRAG_VELOCITY_RATIO = 30.0f;
 	
-	
 	BattleView battleView;
 	
     /** Called when the activity is first created. */
@@ -33,7 +32,5 @@ public class BattleSats extends Activity {
         // turn off the window's title bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
-        //battleView = (BattleView)findViewById(R.id.battle);
-        
     }
 }
