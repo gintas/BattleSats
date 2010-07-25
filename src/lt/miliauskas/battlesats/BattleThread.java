@@ -73,9 +73,9 @@ public class BattleThread extends Thread {
         mLastTime = System.currentTimeMillis();
 		mMode = STATE_RUNNING; // XXX
 		
-		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -2.5f)));
-		//addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(-150.0f, 40.0f), new PointF(0.0f, -1.5f)));
-		//addFlier(new EnemyBomb(this, BattleSats.MASS_SATELLITE, new PointF(150.0f, -70.0f), new PointF(-2.0f, 0.0f)));
+		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(120.0f, 0.0f), new PointF(0.0f, -2.5f)));
+		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(-120.0f, 40.0f), new PointF(0.0f, -2.0f)));
+		addFlier(new EnemyBomb(this, BattleSats.MASS_SATELLITE, new PointF(0.0f, -120.0f), new PointF(2.3f, 0.0f)));
 		
 		while (mRun) {
 			Canvas c = null;
