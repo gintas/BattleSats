@@ -5,7 +5,10 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 
 public class LaserSentinel extends Flier {
-
+	
+	protected int HEIGHT = 10;
+	protected int WIDTH = 5;
+	
 	public LaserSentinel(BattleThread thread, float mass, PointF position,
 			PointF velocity) {
 		super(thread, mass, position, velocity);
@@ -16,7 +19,10 @@ public class LaserSentinel extends Flier {
 		PointF adjCoords = displayPosition();
 		Paint p = new Paint();
 		p.setARGB(255, 120, 180, 0);
-		canvas.drawCircle(adjCoords.x, adjCoords.y, 5.0f, p);
+		canvas.drawRect(
+				adjCoords.x - WIDTH/2, adjCoords.y - HEIGHT/2,
+				adjCoords.x + WIDTH/2, adjCoords.y + HEIGHT/2,
+				p);
 	}
 
 }

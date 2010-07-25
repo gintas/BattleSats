@@ -31,7 +31,7 @@ public class BattleView extends SurfaceView implements Callback {
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
 
-        thread = new BattleThread(holder, context, null);
+        thread = new BattleThread(holder, context);
     }
 
 	@Override

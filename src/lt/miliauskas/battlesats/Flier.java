@@ -26,11 +26,11 @@ public abstract class Flier {
 		this.velocity = velocity;
 	}
 	
-	public void updatePosition() {
+	public void updatePosition(double elapsed) {
 		/* Update satellite coordinates */
 		// TODO: elapsed
 		float r2 = (position.x * position.x + position.y * position.y);
-		float f = (float)(BattleSats.MASS_G * BattleSats.MASS_EARTH * mass / r2);
+		float f = (float)(BattleSats.MASS_G * BattleSats.MASS_EARTH * mass / r2) * (float)elapsed;
 		float r = (float)Math.sqrt(r2);
 		PointF dv = new PointF((position.x / r * f), (position.y / r * f));
 		dv.negate();

@@ -29,8 +29,8 @@ public class BattleThread extends Thread {
 	/** Handle to the surface manager object we interact with */
 	private SurfaceHolder mSurfaceHolder;
 	
-    /** Message handler used by thread to interact with TextView */
-    private Handler mHandler;
+    /** Used to figure out elapsed time between frames */
+    private long mLastTime;
     
     /** Handle to the application context, used to e.g. fetch Drawables. */
     private Context mContext;
@@ -54,10 +54,8 @@ public class BattleThread extends Thread {
 	private List<Flier> newFliers = new LinkedList<Flier>();
 	private List<Flier> deadFliers = new LinkedList<Flier>();
 
-    public BattleThread(SurfaceHolder surfaceHolder, Context context,
-            Handler handler) {
+    public BattleThread(SurfaceHolder surfaceHolder, Context context) {
         mSurfaceHolder = surfaceHolder;
-        mHandler = handler;
 
         mContext = context;
         
@@ -72,10 +70,12 @@ public class BattleThread extends Thread {
 	@Override
 	public void run() {
 		Log.i("BattleThread", "run()");
+        mLastTime = System.currentTimeMillis();
 		mMode = STATE_RUNNING; // XXX
 		
 		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 50.0f), new PointF(0.0f, -2.0f)));
 		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(-150.0f, 40.0f), new PointF(0.0f, -1.5f)));
+		addFlier(new EnemyBomb(this, BattleSats.MASS_SATELLITE, new PointF(150.0f, -70.0f), new PointF(-2.0f, 0.0f)));
 		
 		while (mRun) {
 			Canvas c = null;
@@ -131,9 +131,14 @@ public class BattleThread extends Thread {
 
 	private void updatePhysics() {
 		// TODO elapsed
+		long now = System.currentTimeMillis();
+		double elapsed = (now - mLastTime) / 1000.0;
+		
 		for (Flier flier : fliers) {
-			flier.updatePosition();
+			flier.updatePosition(elapsed);
 		}
+		
+        mLastTime = now;
 		
 		synchronized (newFliers) {
 			for (Flier flier : newFliers) {
