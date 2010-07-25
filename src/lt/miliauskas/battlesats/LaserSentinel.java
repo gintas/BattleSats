@@ -20,7 +20,7 @@ public class LaserSentinel extends Flier {
 		Paint p = new Paint();
 		p.setARGB(255, 120, 180, 0);
 		canvas.save();
-		canvas.rotate(35);
+		//canvas.rotate(35);
 		canvas.drawRect(
 				adjCoords.x - WIDTH/2, adjCoords.y - HEIGHT/2,
 				adjCoords.x + WIDTH/2, adjCoords.y + HEIGHT/2,
