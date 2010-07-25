@@ -30,6 +30,9 @@ public class BattleThread extends Thread {
 	private SurfaceHolder mSurfaceHolder;
 	
     /** Used to figure out elapsed time between frames */
+    private long lastBombardment;
+
+    /** Used to figure out elapsed time between frames */
     private long mLastTime;
     
     /** Handle to the application context, used to e.g. fetch Drawables. */
@@ -70,7 +73,7 @@ public class BattleThread extends Thread {
 	@Override
 	public void run() {
 		Log.i("BattleThread", "run()");
-        mLastTime = System.currentTimeMillis();
+        mLastTime = lastBombardment = System.currentTimeMillis();
 		mMode = STATE_RUNNING; // XXX
 		
 		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -2.2f)));
@@ -141,14 +144,24 @@ public class BattleThread extends Thread {
 		}
 		
         mLastTime = now;
-		
+        
+        // Bombardment.
+        if (now - lastBombardment > 5000) {
+        	lastBombardment = now;
+        	int c1 = (now % 2 == 0) ? 1 : -1;
+        	int c2 = (now / 2 % 2 == 0) ? 1 : -1;
+    		addFlier(new EnemyBomb(this, BattleSats.MASS_SATELLITE,
+    				new PointF(c1 * mCanvasWidth / 2, c2 * mCanvasHeight / 2),
+    				new PointF(-c1 * 0.7f, -c2 * 0.8f)));
+       }
+        
+		// Add new fliers, purge dead ones.
 		synchronized (newFliers) {
 			for (Flier flier : newFliers) {
 				fliers.add(flier);
 			}
 			newFliers.clear();
 		}
-		
 		synchronized (deadFliers) {
 			for (Flier flier : deadFliers) {
 				fliers.remove(flier);
