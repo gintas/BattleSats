@@ -21,7 +21,9 @@ public class LaserSentinel extends Flier {
 		p.setARGB(255, 120, 180, 0);
 		canvas.save();
 		canvas.translate(adjCoords.x, adjCoords.y);
-		canvas.rotate(35);
+		
+		float angle = (float)Math.atan2((double)position.x, (double)position.y);
+		canvas.rotate(angle * 180.0f / (float)Math.PI);
 		canvas.drawRect(-WIDTH/2, -HEIGHT/2, WIDTH/2, HEIGHT/2, p);
 		canvas.restore();
 	}
