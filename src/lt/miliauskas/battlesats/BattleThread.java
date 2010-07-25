@@ -135,7 +135,6 @@ public class BattleThread extends Thread {
 	}
 
 	private void updatePhysics() {
-		// TODO elapsed
 		long now = System.currentTimeMillis();
 		double elapsed = (now - mLastTime) / 1000.0;
 		
