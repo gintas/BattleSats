@@ -54,14 +54,6 @@ public abstract class Flier {
 		thread.removeFlier(this);
 	}
 	
-	protected PointF displayPosition() {
-		return thread.toDisplayCoords(position); 
-	}
-	
-	public boolean isEnemy() {
-		return false;
-	}
-	
 	public void hurt(double damage) {
 		health -= damage;
 		if (health < 0.0f)

@@ -25,11 +25,10 @@ public class LaserSentinel extends Flier {
 
 	@Override
 	public void draw(Canvas canvas) {
-		PointF adjCoords = displayPosition();
 		Paint p = new Paint();
 		p.setARGB(255, (state == STATE_IDLE) ? 120 : 255, 180, 0);
 		canvas.save();
-		canvas.translate(adjCoords.x, adjCoords.y);
+		canvas.translate(position.x, position.y);
 		
 		if (target != null) {
 			PointF targetPos = target.getPosition();

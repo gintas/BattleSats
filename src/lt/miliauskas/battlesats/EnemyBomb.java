@@ -16,10 +16,9 @@ public class EnemyBomb extends Enemy {
 
 	@Override
 	public void draw(Canvas canvas) {
-		PointF adjCoords = displayPosition();
 		Paint p = new Paint();
 		p.setARGB(255, 255, 0, 0);
-		canvas.drawCircle(adjCoords.x, adjCoords.y, 5.0f, p);
+		canvas.drawCircle(position.x, position.y, 5.0f, p);
 	}
 
 	@Override

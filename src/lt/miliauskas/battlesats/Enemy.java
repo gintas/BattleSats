@@ -9,8 +9,4 @@ public abstract class Enemy extends Flier {
 		super(thread, mass, position, velocity);
 	}
 
-	public boolean isEnemy() {
-		return true;
-	}
-
 }

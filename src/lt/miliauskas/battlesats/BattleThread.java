@@ -174,10 +174,6 @@ public class BattleThread extends Thread {
 
 	}
 	
-	public PointF toDisplayCoords(PointF p) {
-		return p; // XXX
-	}
-	
 	public PointF toInternalCoords(PointF p) {
 		return new PointF((p.x - mCanvasWidth / 2) / mVisualScale, (p.y - mCanvasHeight / 2) / mVisualScale);
 	}
