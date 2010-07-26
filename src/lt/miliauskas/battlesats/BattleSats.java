@@ -10,9 +10,9 @@ public class BattleSats extends Activity {
 	/*
 	 * Gameplay constants
 	 */
-	public static final float BOMB_HEALTH = 2.0f;
+	public static final float BOMB_HEALTH = 1.0f;
 	public static final float BOMBER_HEALTH = 1000.0f;
-	public static final float LASER_DAMAGE = 2.0f; // HP / ms
+	public static final float LASER_DAMAGE = 1.0f; // HP / ms
 	public static final float LASER_RANGE = 100.0f;
 
 	/*
