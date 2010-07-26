@@ -11,9 +11,12 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.Vibrator;
 import android.view.SurfaceHolder;
+import android.view.View;
 
 public class BattleThread extends Thread {
 
@@ -74,9 +77,66 @@ public class BattleThread extends Thread {
         // we don't need to transform it and it's faster to draw this way
         mBackgroundImage = BitmapFactory.decodeResource(res,
                 R.drawable.stars);
+        
         mEarth = res.getDrawable(R.drawable.bluemarble);
     }
     
+    /**
+     * Initializes and starts the game.
+     */
+    public void doStart() {
+        synchronized (mSurfaceHolder) {
+        	addInitialFliers();
+            mLastTime = System.currentTimeMillis();
+            setState(STATE_RUNNING);
+        }
+    }
+
+    /**
+     * Pauses the physics update & animation.
+     */
+    public void pause() {
+        synchronized (mSurfaceHolder) {
+            if (mMode == STATE_RUNNING) setState(STATE_PAUSE);
+        }
+    }
+    
+    /**
+     * Resumes from a pause.
+     */
+    public void unpause() {
+        // Move the real time clock up to now
+        synchronized (mSurfaceHolder) {
+            mLastTime = System.currentTimeMillis() + 100;
+        }
+        setState(STATE_RUNNING);
+    }
+
+    /**
+     * Restores game state from the indicated Bundle.
+     * 
+     * @param savedState Bundle containing the game state
+     */
+    public synchronized void restoreState(Bundle savedState) {
+        synchronized (mSurfaceHolder) {
+            setState(STATE_PAUSE);
+            // TODO
+        }
+    }
+    
+    /**
+     * Dump game state to the provided Bundle. Typically called when the
+     * Activity is being suspended.
+     * 
+     * @return Bundle with this view's state
+     */
+    public Bundle saveState(Bundle map) {
+        synchronized (mSurfaceHolder) {
+        	// TODO
+        }
+        return map;
+    }
+
     private void addInitialFliers() {
 		addFlier(new LaserSentinel(this, new PointF(100.0f, 0.0f), new PointF(0.0f, -30f)));
 		addFlier(new LaserSentinel(this, new PointF(-100.0f, 0.0f), new PointF(0.0f, 30f)));
@@ -91,11 +151,7 @@ public class BattleThread extends Thread {
 	
 	@Override
 	public void run() {
-        mLastTime = System.currentTimeMillis();
-		mMode = STATE_RUNNING; // XXX
-		
-		addInitialFliers();
-
+		doStart();
 		while (mRun) {
 			Canvas c = null;
 			try {
@@ -115,10 +171,53 @@ public class BattleThread extends Thread {
 		}
 	}
 
+    /**
+     * Used to signal the thread whether it should be running or not.
+     * Passing true allows the thread to run; passing false will shut it
+     * down if it's already running. Calling start() after this was most
+     * recently called with false will result in an immediate shutdown.
+     * 
+     * @param b true to run, false to shut down
+     */
     public void setRunning(boolean b) {
         mRun = b;
     }
     
+    /**
+     * Sets the game mode. That is, whether we are running, paused, in the
+     * failure state, in the victory state, etc.
+     * 
+     * @see #setState(int, CharSequence)
+     * @param mode one of the STATE_* constants
+     */
+    public void setState(int mode) {
+        synchronized (mSurfaceHolder) {
+            setState(mode, null);
+        }
+    }
+    
+    /**
+     * Sets the game mode. That is, whether we are running, paused, in the
+     * failure state, in the victory state, etc.
+     * 
+     * @param mode one of the STATE_* constants
+     * @param message string to add to screen or null
+     */
+    public void setState(int mode, CharSequence message) {
+        /*
+         * This method optionally can cause a text message to be displayed
+         * to the user when the mode changes. Since the View that actually
+         * renders that text is part of the main View hierarchy and not
+         * owned by this thread, we can't touch the state of that View.
+         * Instead we use a Message + Handler to relay commands to the main
+         * thread, which updates the user-text View.
+         */
+        synchronized (mSurfaceHolder) {
+            mMode = mode;
+            // TODO: reflect state in UI
+        }
+    }
+
     public void addFlier(Flier f) {
     	// TODO: check for dupes
     	synchronized (newFliers) {
@@ -134,10 +233,10 @@ public class BattleThread extends Thread {
     }
 
 	private void doDraw(Canvas canvas) {
-		// Draw the background image. Operations on the Canvas accumulate
-		// so this is like clearing the screen.
+		// Draw background.
 		canvas.drawBitmap(mBackgroundImage, 0, 0, null);
 		
+		// Prepare for drawing objects: set the center of the screen to be (0, 0);
 		canvas.translate(mCanvasWidth / 2, mCanvasHeight / 2);
 		canvas.scale(mVisualScale, mVisualScale);
 
@@ -155,6 +254,11 @@ public class BattleThread extends Thread {
 		long now = System.currentTimeMillis();
 		long elapsed = now - mLastTime;
 		
+        // Do nothing if mLastTime is in the future.
+        // This allows the game-start to delay the start of the physics
+        // by 100ms or whatever.
+        if (mLastTime > now) return;
+
 		for (Flier flier : fliers) {
 			flier.updatePosition(elapsed);
 		}
@@ -201,14 +305,11 @@ public class BattleThread extends Thread {
 	
     /* Callback invoked when the surface dimensions change. */
     public void setSurfaceSize(int width, int height) {
-        // synchronized to make sure these all change atomically
         synchronized (mSurfaceHolder) {
             mCanvasWidth = width;
             mCanvasHeight = height;
 
-    		earthRadius = Math.min(mCanvasWidth, mCanvasHeight) / BattleSats.EARTH_SIZE_QUOTIENT / 2;
-   
-            // don't forget to resize the background image
+            // resize the background image
             mBackgroundImage = Bitmap.createScaledBitmap(
                     mBackgroundImage, width, height, true);
         }

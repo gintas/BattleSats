@@ -34,6 +34,15 @@ public class BattleSats extends Activity {
 	/** How many pixels to drag onscreen to give a flier a velocity of 1 */
 	public static final float DRAG_VELOCITY_RATIO = 5.0f;
 	
+	/*
+     * State-tracking constants
+     */
+    public static final int STATE_LOSE = 1;
+    public static final int STATE_PAUSE = 2;
+    public static final int STATE_READY = 3;
+    public static final int STATE_RUNNING = 4;
+    public static final int STATE_WIN = 5;
+	
 	BattleView battleView;
 	
     /** Called when the activity is first created. */
@@ -43,5 +52,41 @@ public class BattleSats extends Activity {
         // turn off the window's title bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
+        
+        battleView = (BattleView)findViewById(R.id.battle);
+        BattleThread thread = battleView.getThread();
+
+        if (savedInstanceState == null) {
+            // we were just launched: set up a new game
+            thread.setState(BattleThread.STATE_READY);
+        } else {
+            // we are being restored: resume a previous game
+            thread.restoreState(savedInstanceState);
+            Log.w(this.getClass().getName(), "SIS is nonnull");
+        }
     }
+    
+    /**
+     * Invoked when the Activity loses user focus.
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        battleView.getThread().pause(); // pause game when Activity pauses
+    }
+
+    /**
+     * Notification that something is about to happen, to give the Activity a
+     * chance to save state.
+     * 
+     * @param outState a Bundle into which this Activity should save its state
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // just have the View's thread save its state into our Bundle
+        super.onSaveInstanceState(outState);
+        battleView.getThread().saveState(outState);
+        Log.w(this.getClass().getName(), "SIS called");
+    }
+
 }

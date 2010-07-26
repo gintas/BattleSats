@@ -9,7 +9,7 @@ import android.view.SurfaceView;
 import android.view.SurfaceHolder.Callback;
 
 public class BattleView extends SurfaceView implements Callback {
-
+    
     /** The thread that actually draws the animation */
     private BattleThread thread;
 	
@@ -19,15 +19,23 @@ public class BattleView extends SurfaceView implements Callback {
 		// register our interest in hearing about changes to our surface
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
-
+        
         thread = new BattleThread(holder, context);
+        setOnTouchListener(new TouchHandler(thread));
     }
 
-	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
-        thread.setSurfaceSize(width, height);		
+    public BattleThread getThread() {
+		return thread;
 	}
+    
+    /**
+     * Standard window-focus override. Notice focus lost so we can pause on
+     * focus lost. e.g. user switches to take a call.
+     */
+    @Override
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
+        if (!hasWindowFocus) thread.pause();
+    }
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
@@ -37,7 +45,13 @@ public class BattleView extends SurfaceView implements Callback {
         thread.start();
 	}
 
-    /*
+	@Override
+	public void surfaceChanged(SurfaceHolder holder, int format, int width,
+			int height) {
+        thread.setSurfaceSize(width, height);		
+	}
+
+	/*
      * Callback invoked when the Surface has been destroyed and must no longer
      * be touched. WARNING: after this method returns, the Surface/Canvas must
      * never be touched again!
@@ -56,62 +70,5 @@ public class BattleView extends SurfaceView implements Callback {
             }
         }
     }
-	
-	/* Touch handling */
-	
-	private static final int POINTER_STATE_IDLE = 0;
-	private static final int POINTER_STATE_LAUNCHING = 1;
-	private static final int POINTER_STATE_RESIZING = 2;
-	private static final int POINTER_STATE_AFTER_RESIZE = 3;
 
-	private int pointerState = POINTER_STATE_IDLE;
-	private PointF motionStartPos = new PointF();
-	private float multitouchInitialLength;
-	private float multitouchInitialScale;
-	
-	private float multitouchLength(MotionEvent event) {
-		return PointF.length(
-				event.getX(1) - event.getX(0),
-				event.getY(1) - event.getY(0));
-	}
-	
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		int action = event.getAction();
-		if (action == MotionEvent.ACTION_DOWN) {
-			// Start of a gesture.
-			pointerState = POINTER_STATE_LAUNCHING;
-			motionStartPos.set(event.getX(), event.getY());
-		} else if (action == MotionEvent.ACTION_MOVE) {
-			// Pointer move. Only interesting if we're resizing.
-			if (pointerState == POINTER_STATE_RESIZING) {
-				thread.mVisualScale = multitouchInitialScale * multitouchLength(event) / multitouchInitialLength;
-			}
-		} else if (action == MotionEvent.ACTION_POINTER_2_DOWN) {
-			// 2nd pointer down, starting scaling
-			multitouchInitialLength = multitouchLength(event);
-			multitouchInitialScale = thread.mVisualScale;
-			if (multitouchInitialLength > 20.0f) {
-				// Avoid spurious multitouch.
-				pointerState = POINTER_STATE_RESIZING;
-			}
-		} else if ((action == MotionEvent.ACTION_POINTER_2_UP) || (action == MotionEvent.ACTION_POINTER_1_UP)) {
-			// Multitouch ended, finishing scaling.
-			if (pointerState == POINTER_STATE_RESIZING) {
-				pointerState = POINTER_STATE_AFTER_RESIZE;
-			}
-		} else if (event.getAction() == MotionEvent.ACTION_UP) {
-			if (pointerState == POINTER_STATE_LAUNCHING) {
-				// Launch a new satellite.
-				PointF motionEndPos = new PointF(event.getX(), event.getY());
-				PointF v = new PointF(
-						(motionEndPos.x - motionStartPos.x) / BattleSats.DRAG_VELOCITY_RATIO,
-						(motionEndPos.y - motionStartPos.y) / BattleSats.DRAG_VELOCITY_RATIO);
-				Flier f = new LaserSentinel(thread, thread.toInternalCoords(motionStartPos), v);
-				thread.addFlier(f);
-			}
-		}
-		return true;
-	}
-	
 }
