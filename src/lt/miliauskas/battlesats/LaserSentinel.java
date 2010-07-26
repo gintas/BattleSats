@@ -36,7 +36,12 @@ public class LaserSentinel extends Flier {
 			PointF d = new PointF(targetPos.x - position.x, targetPos.y - position.y);
 			float angle = (float)Math.atan2(d.x, d.y);
 			canvas.rotate(angle * 180.0f / (float)Math.PI);
-			canvas.drawRect(r, paint)
+			if (state == STATE_FIRING) {
+				// Draw laser beam.
+				Paint laserPaint = new Paint();
+				laserPaint.setARGB(128, 0, 200, 200);
+				canvas.drawRect(-2, -HEIGHT/2, 2, -d.length(), laserPaint);
+			}
 		}
 		canvas.drawRect(-WIDTH/2, -HEIGHT/2, WIDTH/2, HEIGHT/2, p);
 		canvas.restore();
