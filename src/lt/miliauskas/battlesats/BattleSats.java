@@ -25,6 +25,7 @@ public class BattleSats extends Activity {
 	 * Constants for visuals
 	 */
 	public static final int EARTH_SIZE_QUOTIENT = 10;
+	public static final int LASER_BEAM_RADIUS = 2;
 	
 	/** How many pixels to drag onscreen to give a flier a velocity of 1 */
 	public static final float DRAG_VELOCITY_RATIO = 5.0f;

@@ -66,24 +66,65 @@ public class BattleView extends SurfaceView implements Callback {
         }
     }
 	
+	
+	private static final int POINTER_STATE_IDLE = 0;
+	private static final int POINTER_STATE_LAUNCHING = 1;
+	private static final int POINTER_STATE_RESIZING = 2;
+	private static final int POINTER_STATE_AFTER_RESIZE = 3;
+
+	private int pointerState = POINTER_STATE_IDLE;
 	private PointF motionStartPos;
+	private float multitouchInitialLength;
+	private PointF multitouchInitialCenter;
+	private float multitouchInitialScale;
+	
+	private float multitouchLength(MotionEvent event) {
+		return PointF.length(
+				event.getX(1) - event.getX(0),
+				event.getY(1) - event.getY(0));
+	}
+	
+	private PointF multitouchCenter(MotionEvent event) {
+		return new PointF(
+				(event.getX(1) + event.getX(0)) / 2,
+				(event.getY(1) + event.getY(0)) / 2);	
+	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		// TODO Auto-generated method stub
-		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+		int action = event.getAction();
+		Log.i("touch event", "action:" + action);
+		if (action == MotionEvent.ACTION_DOWN) {
+			// Start of a gesture.
+			pointerState = POINTER_STATE_LAUNCHING;
 			motionStartPos = new PointF(event.getX(), event.getY());
+		} else if (action == MotionEvent.ACTION_MOVE) {
+			// Pointer move. Only interesting if we're resizing.
+			if (pointerState == POINTER_STATE_RESIZING) {
+				float currentLength = multitouchLength(event);
+				thread.mVisualScale = multitouchInitialScale * currentLength / multitouchInitialLength;
+			}
+		} else if (action == MotionEvent.ACTION_POINTER_2_DOWN) {
+			// 2nd pointer down, starting scaling
+			pointerState = POINTER_STATE_RESIZING;
+			multitouchInitialLength = multitouchLength(event);
+			multitouchInitialCenter = multitouchCenter(event);
+			multitouchInitialScale = thread.mVisualScale;
+		} else if ((action == MotionEvent.ACTION_POINTER_2_UP) || (action == MotionEvent.ACTION_POINTER_1_UP)) {
+			// Multitouch ended, finishing scaling.
+			pointerState = POINTER_STATE_AFTER_RESIZE;
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
-			PointF motionEndPos = new PointF(event.getX(), event.getY());
-			PointF v = new PointF(
-					(motionEndPos.x - motionStartPos.x) / BattleSats.DRAG_VELOCITY_RATIO,
-					-(motionEndPos.y - motionStartPos.y) / BattleSats.DRAG_VELOCITY_RATIO);
-			Flier f = new LaserSentinel(thread, BattleSats.MASS_SATELLITE, thread.toInternalCoords(motionStartPos), v);
-			thread.addFlier(f);
-			
+			if (pointerState == POINTER_STATE_LAUNCHING) {
+				// Launch a new satellite.
+				PointF motionEndPos = new PointF(event.getX(), event.getY());
+				PointF v = new PointF(
+						(motionEndPos.x - motionStartPos.x) / BattleSats.DRAG_VELOCITY_RATIO,
+						(motionEndPos.y - motionStartPos.y) / BattleSats.DRAG_VELOCITY_RATIO);
+				Flier f = new LaserSentinel(thread, BattleSats.MASS_SATELLITE, thread.toInternalCoords(motionStartPos), v);
+				thread.addFlier(f);
+			}			
 			motionStartPos = null;
 		}
-		
 		return true;
 	}
 	

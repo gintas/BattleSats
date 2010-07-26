@@ -44,9 +44,12 @@ public class BattleThread extends Thread {
 	/** Indicate whether the surface has been created & is ready to draw */
 	private boolean mRun = false;
 	
+	/** Visual scale factor */
+	public float mVisualScale = 1.0f; // XXX fix visibility
+	
 	private int mCanvasHeight = 1;
 	private int mCanvasWidth = 1;
-	
+		
 	/** The drawable to use as the background of the animation canvas */
 	private Bitmap mBackgroundImage;
 	
@@ -121,10 +124,11 @@ public class BattleThread extends Thread {
 		// Draw the background image. Operations on the Canvas accumulate
 		// so this is like clearing the screen.
 		canvas.drawBitmap(mBackgroundImage, 0, 0, null);
+		
+		canvas.translate(mCanvasWidth / 2, mCanvasHeight / 2);
+		canvas.scale(mVisualScale, mVisualScale);
 
-		mEarth.setBounds(
-				mCanvasWidth / 2 - earthRadius, mCanvasHeight / 2 - earthRadius,
-				mCanvasWidth / 2 + earthRadius, mCanvasHeight / 2 + earthRadius);
+		mEarth.setBounds(-earthRadius, -earthRadius, earthRadius, earthRadius);
 		mEarth.draw(canvas);
 		
 		synchronized (fliers) {
@@ -171,11 +175,11 @@ public class BattleThread extends Thread {
 	}
 	
 	public PointF toDisplayCoords(PointF p) {
-		return new PointF(mCanvasWidth / 2 + p.x, mCanvasHeight / 2 - p.y);
+		return p; // XXX
 	}
 	
 	public PointF toInternalCoords(PointF p) {
-		return new PointF(p.x - mCanvasWidth / 2, mCanvasHeight / 2 - p.y);		
+		return new PointF((p.x - mCanvasWidth / 2) / mVisualScale, (p.y - mCanvasHeight / 2) / mVisualScale);
 	}
 	
 	public Enemy findNearestEnemy(PointF p) {
