@@ -75,11 +75,12 @@ public class BattleThread extends Thread {
         mLastTime = lastBombardment = System.currentTimeMillis();
 		mMode = STATE_RUNNING; // XXX
 		
-		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -1.6f)));
-//		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(-100.0f, 0.0f), new PointF(0.0f, -2.4f)));
-//		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(80.0f, -20.0f), new PointF(0.0f, -2.6f)));
-//		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(-120.0f, 40.0f), new PointF(0.0f, -2.0f)));
-//		addFlier(new EnemyBomb(this, BattleSats.MASS_SATELLITE, new PointF(0.0f, -120.0f), new PointF(2.3f, 0.0f)));
+		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -1.8f)));
+		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -2.0f)));
+		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -2.2f)));
+		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(-100.0f, 0.0f), new PointF(0.0f, -1.8f)));
+		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(-100.0f, 0.0f), new PointF(0.0f, -2.0f)));
+		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(-100.0f, 0.0f), new PointF(0.0f, -2.2f)));
 		
 		while (mRun) {
 			Canvas c = null;
