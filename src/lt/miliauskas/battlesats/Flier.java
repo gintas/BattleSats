@@ -55,7 +55,6 @@ public abstract class Flier {
 		outPos.x = FloatMath.cos(phase) * radius;
 		outPos.y = FloatMath.sin(phase) * radius;
 		float v = FloatMath.sqrt(BattleSats.MASS_EARTH / radius);
-		Log.i("Flier", "x=" + outPos.x +", y=" + outPos.y +", v=" + v);
 		outVelocity.x = v * FloatMath.sin(phase) * (clockwise ? -1 : 1);
 		outVelocity.y = v * FloatMath.cos(phase) * (clockwise ? 1 : -1);
 	}
