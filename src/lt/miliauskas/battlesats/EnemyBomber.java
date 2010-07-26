@@ -1,5 +1,7 @@
 package lt.miliauskas.battlesats;
 
+import java.util.Random;
+
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
@@ -10,6 +12,7 @@ public class EnemyBomber extends Enemy {
 	protected RectF ovalFrame = new RectF();
 	protected Paint bomberPaint = new Paint();
 	protected int millisSinceLastBomb = 0;
+	protected Random random = new Random();
 
 	public EnemyBomber(BattleThread thread, PointF position, PointF velocity) {
 		super(thread, position, velocity);
@@ -23,8 +26,10 @@ public class EnemyBomber extends Enemy {
 		
 		millisSinceLastBomb += elapsed;
 		if (millisSinceLastBomb > 3000) {
+			float dx = random.nextFloat() * 10.0f;
+			float dy = random.nextFloat() * 10.0f;
 			thread.addFlier(new EnemyBomb(thread, 1.0f, new PointF(position.x, position.y),
-					new PointF(-position.x / 20.0f, -position.y / 20.0f)));
+					new PointF(-position.x / 20.0f + dx, -position.y / 20.0f + dy)));
 			// TODO: randomize velocity a little
 			millisSinceLastBomb = 0;
 		}
