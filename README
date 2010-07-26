@@ -12,5 +12,5 @@ Swipe the screen to launch a satellite. The longer the swipe, the higher
 the initial velocity. Pinch to zoom in/out.
 
 Battle Sats is written in Java (using Eclipse).  It uses some bits from the
-Lunar Lander sample included with the Android SDK.  Feel free to look around
-the source code.
+Lunar Lander sample included with the Android SDK.  It is available under
+the New BSD licence. Feel free to look around the source code.
