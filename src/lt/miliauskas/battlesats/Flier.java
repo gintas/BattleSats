@@ -17,8 +17,14 @@ public abstract class Flier {
 	/** Velocity */
 	protected PointF velocity;
 	
+	protected float health = 1.0f;
+	
 	protected BattleThread thread;
 	
+	public PointF getPosition() {
+		return new PointF(position.x, position.y);
+	}
+
 	public Flier(BattleThread thread, float mass, PointF position, PointF velocity) {
 		this.thread = thread;
 		this.mass = mass;
@@ -52,6 +58,12 @@ public abstract class Flier {
 	
 	public boolean isEnemy() {
 		return false;
+	}
+	
+	public void hurt(double damage) {
+		health -= damage;
+		if (health < 0.0f)
+			destroy();
 	}
 	
 	public abstract void draw(Canvas canvas);

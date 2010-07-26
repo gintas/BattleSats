@@ -76,9 +76,13 @@ public class BattleThread extends Thread {
         mLastTime = lastBombardment = System.currentTimeMillis();
 		mMode = STATE_RUNNING; // XXX
 		
-		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -2.2f)));
-		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(-100.0f, 0.0f), new PointF(0.0f, -2.4f)));
-		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(80.0f, -20.0f), new PointF(0.0f, -2.6f)));
+		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -2.6f)));
+		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -2.7f)));
+		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -2.8f)));
+		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -2.9f)));
+		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -3.0f)));
+//		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(-100.0f, 0.0f), new PointF(0.0f, -2.4f)));
+//		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(80.0f, -20.0f), new PointF(0.0f, -2.6f)));
 //		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(-120.0f, 40.0f), new PointF(0.0f, -2.0f)));
 //		addFlier(new EnemyBomb(this, BattleSats.MASS_SATELLITE, new PointF(0.0f, -120.0f), new PointF(2.3f, 0.0f)));
 		
@@ -106,12 +110,14 @@ public class BattleThread extends Thread {
     }
     
     public void addFlier(Flier f) {
+    	// TODO: check for dupes
     	synchronized (newFliers) {
     		newFliers.add(f);
     	}
     }
     
     public void removeFlier(Flier f) {
+    	// TODO: check for dupes
 		synchronized (deadFliers) {
 			deadFliers.add(f);
 		}
@@ -145,7 +151,7 @@ public class BattleThread extends Thread {
         mLastTime = now;
         
         // Bombardment.
-        if (now - lastBombardment > 5000) {
+        if (now - lastBombardment > 2000) {
         	lastBombardment = now;
         	int c1 = (now % 2 == 0) ? 1 : -1;
         	int c2 = (now / 2 % 2 == 0) ? 1 : -1;
@@ -183,7 +189,8 @@ public class BattleThread extends Thread {
 		Enemy nearest = null;
 		for (Flier flier : fliers) {
 			if (flier instanceof Enemy) {
-				PointF delta = new PointF(flier.position.x - p.x, flier.position.y - p.y);
+				PointF flier_pos = flier.getPosition();
+				PointF delta = new PointF(flier_pos.x - p.x, flier_pos.y - p.y);
 				float d = delta.length();
 				if (d < nearest_d) {
 					nearest_d = d;
