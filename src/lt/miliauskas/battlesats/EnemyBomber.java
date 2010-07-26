@@ -26,12 +26,12 @@ public class EnemyBomber extends Enemy {
 		super.updatePosition(elapsed);
 		
 		millisSinceLastBomb += elapsed;
-		if (millisSinceLastBomb > 3000) {
-			float dx = random.nextFloat() * 10.0f - 5.0f;
-			float dy = random.nextFloat() * 10.0f - 5.0f;
+		if (millisSinceLastBomb > BattleSats.BOMBER_INTERVAL) {
+			float dx = random.nextFloat() * 6.0f - 3.0f;
+			float dy = random.nextFloat() * 6.0f - 3.0f;
 			thread.addFlier(new EnemyBomb(thread, 1.0f, new PointF(position.x, position.y),
 					new PointF(-position.x / 20.0f + dx, -position.y / 20.0f + dy)));
-			millisSinceLastBomb = 0;
+			millisSinceLastBomb -= BattleSats.BOMBER_INTERVAL;
 		}
 	}
 
