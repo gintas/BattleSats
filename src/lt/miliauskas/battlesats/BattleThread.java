@@ -139,6 +139,7 @@ public class BattleThread extends Thread {
     private void addInitialFliers() {
     	PointF p = new PointF();
     	PointF v = new PointF();
+    	
     	Flier.stationaryOrbitParams(100.0f, 0.0f, false, p, v);
 		addFlier(new LaserSentinel(this, p, v));
     	Flier.stationaryOrbitParams(100.0f, (float)Math.PI / 2.0f, false, p, v);
@@ -148,10 +149,14 @@ public class BattleThread extends Thread {
     	Flier.stationaryOrbitParams(100.0f, (float)Math.PI * 3.0f / 2.0f, false, p, v);
 		addFlier(new LaserSentinel(this, p, v));
 
-		addFlier(new EnemyBomber(this, new PointF(400.0f, -400.0f), new PointF(10.0f, 10.0f)));
-		addFlier(new EnemyBomber(this, new PointF(-440.0f, 400.0f), new PointF(-10.0f, -10.0f)));
-		addFlier(new EnemyBomber(this, new PointF(-360.0f, 400.0f), new PointF(-10.0f, -10.0f)));
-		addFlier(new EnemyBomber(this, new PointF(-400.0f, 440.0f), new PointF(-10.0f, -10.0f)));
+    	Flier.stationaryOrbitParams(400.0f, (float)Math.PI * 0.45f, true, p, v);
+		addFlier(new EnemyBomber(this, p, v));
+    	Flier.stationaryOrbitParams(400.0f, (float)Math.PI * 0.5f, true, p, v);
+		addFlier(new EnemyBomber(this, p, v));
+    	Flier.stationaryOrbitParams(400.0f, (float)Math.PI * 0.55f, true, p, v);
+		addFlier(new EnemyBomber(this, p, v));
+    	Flier.stationaryOrbitParams(400.0f, (float)Math.PI * 1.75f, true, p, v);
+		addFlier(new EnemyBomber(this, p, v));
     }
 	
 	@Override
