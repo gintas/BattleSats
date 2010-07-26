@@ -14,6 +14,7 @@ public class EnemyBomb extends Enemy {
 			PointF velocity) {
 		super(thread, position, velocity);
 		health = BattleSats.BOMB_HEALTH;
+		bombPaint.setAntiAlias(true);
 		bombPaint.setARGB(255, 255, 0, 0);
 	}
 

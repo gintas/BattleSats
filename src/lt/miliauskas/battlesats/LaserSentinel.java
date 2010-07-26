@@ -25,7 +25,9 @@ public class LaserSentinel extends Flier {
 	public LaserSentinel(BattleThread thread, PointF position, PointF velocity) {
 		super(thread, position, velocity);
 		
+		bodyPaint.setAntiAlias(true);
 		bodyPaint.setARGB(255, (state == STATE_IDLE) ? 120 : 255, 180, 0);
+		laserPaint.setAntiAlias(true);
 		laserPaint.setARGB(90, 0, 200, 200);
 	}
 
