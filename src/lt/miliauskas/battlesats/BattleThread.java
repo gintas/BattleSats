@@ -178,6 +178,22 @@ public class BattleThread extends Thread {
 		return new PointF(p.x - mCanvasWidth / 2, mCanvasHeight / 2 - p.y);		
 	}
 	
+	public Enemy findNearestEnemy(PointF p) {
+		float nearest_d = 1000000.0f;
+		Enemy nearest = null;
+		for (Flier flier : fliers) {
+			if (flier instanceof Enemy) {
+				PointF delta = new PointF(flier.position.x - p.x, flier.position.y - p.y);
+				float d = delta.length();
+				if (d < nearest_d) {
+					nearest_d = d;
+					nearest = (Enemy)flier;
+				}
+			}
+		}
+		return nearest;
+	}
+	
     /* Callback invoked when the surface dimensions change. */
     public void setSurfaceSize(int width, int height) {
         // synchronized to make sure these all change atomically
