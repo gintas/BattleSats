@@ -10,7 +10,7 @@ public class BattleSats extends Activity {
 	/*
 	 * Gameplay constants
 	 */
-	public static final float BOMB_HEALTH = 10.0f;
+	public static final float BOMB_HEALTH = 2.0f;
 	public static final float LASER_DAMAGE = 2.0f; // HP / ms
 	public static final float LASER_RANGE = 100.0f;
 
@@ -27,7 +27,7 @@ public class BattleSats extends Activity {
 	public static final int EARTH_SIZE_QUOTIENT = 5;
 	
 	/** How many pixels to drag onscreen to give a flier a velocity of 1 */
-	public static final float DRAG_VELOCITY_RATIO = 30.0f;
+	public static final float DRAG_VELOCITY_RATIO = 70.0f;
 	
 	BattleView battleView;
 	
@@ -35,7 +35,6 @@ public class BattleSats extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("BattleSats", "onCreate");
         // turn off the window's title bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);

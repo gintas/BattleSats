@@ -25,8 +25,6 @@ public class BattleView extends SurfaceView implements Callback {
 	public BattleView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
-        Log.i("BattleView", "constructor");
-        
 		// register our interest in hearing about changes to our surface
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
@@ -80,12 +78,11 @@ public class BattleView extends SurfaceView implements Callback {
 			PointF v = new PointF(
 					(motionEndPos.x - motionStartPos.x) / BattleSats.DRAG_VELOCITY_RATIO,
 					-(motionEndPos.y - motionStartPos.y) / BattleSats.DRAG_VELOCITY_RATIO);
-			Flier f = new EnemyBomb(thread, BattleSats.MASS_SATELLITE, thread.toInternalCoords(motionStartPos), v);
+			Flier f = new LaserSentinel(thread, BattleSats.MASS_SATELLITE, thread.toInternalCoords(motionStartPos), v);
 			thread.addFlier(f);
 			
 			motionStartPos = null;
 		}
-		Log.i("BattleView", "touch " + event.getAction());
 		
 		return true;
 	}

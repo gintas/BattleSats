@@ -12,7 +12,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.util.Log;
+import android.os.Vibrator;
 import android.view.SurfaceHolder;
 
 public class BattleThread extends Thread {
@@ -72,15 +72,10 @@ public class BattleThread extends Thread {
 	
 	@Override
 	public void run() {
-		Log.i("BattleThread", "run()");
         mLastTime = lastBombardment = System.currentTimeMillis();
 		mMode = STATE_RUNNING; // XXX
 		
-		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -2.6f)));
-		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -2.7f)));
-		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -2.8f)));
-		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -2.9f)));
-		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -3.0f)));
+		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -1.6f)));
 //		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(-100.0f, 0.0f), new PointF(0.0f, -2.4f)));
 //		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(80.0f, -20.0f), new PointF(0.0f, -2.6f)));
 //		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(-120.0f, 40.0f), new PointF(0.0f, -2.0f)));
@@ -199,6 +194,11 @@ public class BattleThread extends Thread {
 			}
 		}
 		return nearest;
+	}
+	
+	public void vibrate() {
+		Vibrator v = (Vibrator)mContext.getSystemService(Context.VIBRATOR_SERVICE);
+		v.vibrate(200);
 	}
 	
     /* Callback invoked when the surface dimensions change. */
