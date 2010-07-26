@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.util.Log;
 
 public class EnemyBomber extends Enemy {
 
@@ -26,11 +27,10 @@ public class EnemyBomber extends Enemy {
 		
 		millisSinceLastBomb += elapsed;
 		if (millisSinceLastBomb > 3000) {
-			float dx = random.nextFloat() * 10.0f;
-			float dy = random.nextFloat() * 10.0f;
+			float dx = random.nextFloat() * 10.0f - 5.0f;
+			float dy = random.nextFloat() * 10.0f - 5.0f;
 			thread.addFlier(new EnemyBomb(thread, 1.0f, new PointF(position.x, position.y),
 					new PointF(-position.x / 20.0f + dx, -position.y / 20.0f + dy)));
-			// TODO: randomize velocity a little
 			millisSinceLastBomb = 0;
 		}
 	}
