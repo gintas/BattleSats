@@ -57,6 +57,8 @@ public class BattleView extends SurfaceView implements Callback {
         }
     }
 	
+	/* Touch handling */
+	
 	private static final int POINTER_STATE_IDLE = 0;
 	private static final int POINTER_STATE_LAUNCHING = 1;
 	private static final int POINTER_STATE_RESIZING = 2;

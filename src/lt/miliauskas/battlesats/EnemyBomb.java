@@ -19,7 +19,7 @@ public class EnemyBomb extends Enemy {
 
 	@Override
 	public void draw(Canvas canvas) {
-		canvas.drawCircle(position.x, position.y, 5.0f, bombPaint);
+		canvas.drawCircle(position.x, position.y, BattleSats.BOMB_RADIUS, bombPaint);
 	}
 
 	@Override

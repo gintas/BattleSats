@@ -30,9 +30,6 @@ public class BattleThread extends Thread {
 	private SurfaceHolder mSurfaceHolder;
 	
     /** Used to figure out elapsed time between frames */
-    private long lastBombardment;
-
-    /** Used to figure out elapsed time between frames */
     private long mLastTime;
     
     /** Handle to the application context, used to e.g. fetch Drawables. */
@@ -79,17 +76,25 @@ public class BattleThread extends Thread {
                 R.drawable.stars);
         mEarth = res.getDrawable(R.drawable.bluemarble);
     }
-	
-	@Override
-	public void run() {
-        mLastTime = lastBombardment = System.currentTimeMillis();
-		mMode = STATE_RUNNING; // XXX
-		
+    
+    private void addInitialFliers() {
 		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -30f)));
 		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(-100.0f, 0.0f), new PointF(0.0f, 30f)));
 		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(0.0f, 100.0f), new PointF(30.0f, 0.0f)));
 		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(0.0f, -100.0f), new PointF(-30.0f, 0.0f)));
+		addFlier(new EnemyBomber(this, BattleSats.MASS_SATELLITE, new PointF(400.0f, -400.0f), new PointF(10.0f, 10.0f)));
+		addFlier(new EnemyBomber(this, BattleSats.MASS_SATELLITE, new PointF(-440.0f, 400.0f), new PointF(-10.0f, -10.0f)));
+		addFlier(new EnemyBomber(this, BattleSats.MASS_SATELLITE, new PointF(-360.0f, 400.0f), new PointF(-10.0f, -10.0f)));
+		addFlier(new EnemyBomber(this, BattleSats.MASS_SATELLITE, new PointF(-400.0f, 440.0f), new PointF(-10.0f, -10.0f)));
+    }
+	
+	@Override
+	public void run() {
+        mLastTime = System.currentTimeMillis();
+		mMode = STATE_RUNNING; // XXX
 		
+		addInitialFliers();
+
 		while (mRun) {
 			Canvas c = null;
 			try {
@@ -155,17 +160,6 @@ public class BattleThread extends Thread {
 		
         mLastTime = now;
         
-        // Bombardment.
-        // TODO: bomber unit
-        if (now - lastBombardment > 2000) {
-        	lastBombardment = now;
-        	int c1 = (now % 2 == 0) ? 1 : -1;
-        	int c2 = (now / 2 % 2 == 0) ? 1 : -1;
-    		addFlier(new EnemyBomb(this, BattleSats.MASS_SATELLITE,
-    				new PointF(c1 * mCanvasWidth / 2, c2 * mCanvasHeight / 2),
-    				new PointF(-c1 * 0.7f, -c2 * 0.8f)));
-       }
-
 		// Add new fliers, purge dead ones.
 		synchronized (newFliers) {
 			for (Flier flier : newFliers) {

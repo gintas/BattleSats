@@ -11,6 +11,7 @@ public class BattleSats extends Activity {
 	 * Gameplay constants
 	 */
 	public static final float BOMB_HEALTH = 2.0f;
+	public static final float BOMBER_HEALTH = 1000.0f;
 	public static final float LASER_DAMAGE = 2.0f; // HP / ms
 	public static final float LASER_RANGE = 100.0f;
 
@@ -26,6 +27,9 @@ public class BattleSats extends Activity {
 	 */
 	public static final int EARTH_SIZE_QUOTIENT = 10;
 	public static final int LASER_BEAM_RADIUS = 2;
+	public static final float BOMB_RADIUS = 5.0f;
+	public static final float BOMBER_WIDTH = 25.0f;
+	public static final float BOMBER_HEIGHT = 10.0f;
 	
 	/** How many pixels to drag onscreen to give a flier a velocity of 1 */
 	public static final float DRAG_VELOCITY_RATIO = 5.0f;
