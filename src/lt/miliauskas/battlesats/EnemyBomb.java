@@ -8,17 +8,18 @@ import android.os.Vibrator;
 
 public class EnemyBomb extends Enemy {
 	
+	protected Paint bombPaint = new Paint();
+	
 	public EnemyBomb(BattleThread thread, float mass, PointF position,
 			PointF velocity) {
 		super(thread, mass, position, velocity);
 		health = BattleSats.BOMB_HEALTH;
+		bombPaint.setARGB(255, 255, 0, 0);
 	}
 
 	@Override
 	public void draw(Canvas canvas) {
-		Paint p = new Paint();
-		p.setARGB(255, 255, 0, 0);
-		canvas.drawCircle(position.x, position.y, 5.0f, p);
+		canvas.drawCircle(position.x, position.y, 5.0f, bombPaint);
 	}
 
 	@Override

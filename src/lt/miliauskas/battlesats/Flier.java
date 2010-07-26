@@ -13,7 +13,7 @@ public abstract class Flier {
 	protected float mass = 1.0f;
 	
 	/** Position */
-	protected PointF position;
+	public PointF position;
 	
 	/** Velocity */
 	protected PointF velocity;
@@ -21,10 +21,6 @@ public abstract class Flier {
 	protected float health = 1.0f;
 	
 	protected BattleThread thread;
-	
-	public PointF getPosition() {
-		return new PointF(position.x, position.y);
-	}
 
 	public Flier(BattleThread thread, float mass, PointF position, PointF velocity) {
 		this.thread = thread;
@@ -34,20 +30,16 @@ public abstract class Flier {
 	}
 	
 	public void updatePosition(long elapsed) {
-		/* Update satellite coordinates */
-//		for (int i = 0; i < elapsed; i++) {
-			float r = position.length();
-			float m = BattleSats.MASS_G * BattleSats.MASS_EARTH / (r * r);
-			PointF dv = new PointF((m * position.x / r), (m * position.y / r));
-			dv.negate();
-			velocity.offset(dv.x, dv.y);
-			position.offset(velocity.x * elapsed / 1000.0f, velocity.y * elapsed / 1000.0f);
-		
-			if (position.length() < thread.earthRadius) {
-				destroy();
-//				break;
-			}
-//		}
+		float r = position.length();
+		float m = BattleSats.MASS_G * BattleSats.MASS_EARTH / (r * r * r);
+		float dv_x = m * position.x;
+		float dv_y = m * position.y;
+		velocity.offset(-dv_x, -dv_y);
+		position.offset(velocity.x * elapsed / 1000.0f, velocity.y * elapsed / 1000.0f);
+	
+		if (position.length() < thread.earthRadius) {
+			destroy();
+		}
 	}
 	
 	public void destroy() {
@@ -61,5 +53,4 @@ public abstract class Flier {
 	}
 	
 	public abstract void draw(Canvas canvas);
-
 }

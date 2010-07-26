@@ -45,9 +45,12 @@ public class BattleThread extends Thread {
 	private boolean mRun = false;
 	
 	/** Visual scale factor */
-	public float mVisualScale = 1.0f; // XXX fix visibility
+	public float mVisualScale = 1.0f;
 	
+	/** Canvas height */
 	private int mCanvasHeight = 1;
+
+	/** Canvas width */
 	private int mCanvasWidth = 1;
 		
 	/** The drawable to use as the background of the animation canvas */
@@ -59,12 +62,16 @@ public class BattleThread extends Thread {
 	private List<Flier> fliers = new LinkedList<Flier>();
 	private List<Flier> newFliers = new LinkedList<Flier>();
 	private List<Flier> deadFliers = new LinkedList<Flier>();
+	
+	private Vibrator vibrator;
 
     public BattleThread(SurfaceHolder surfaceHolder, Context context) {
         mSurfaceHolder = surfaceHolder;
 
         mContext = context;
         
+		vibrator = (Vibrator)mContext.getSystemService(Context.VIBRATOR_SERVICE);
+
         Resources res = context.getResources();
         // load background image as a Bitmap instead of a Drawable b/c
         // we don't need to transform it and it's faster to draw this way
@@ -149,6 +156,7 @@ public class BattleThread extends Thread {
         mLastTime = now;
         
         // Bombardment.
+        // TODO: bomber unit
         if (now - lastBombardment > 2000) {
         	lastBombardment = now;
         	int c1 = (now % 2 == 0) ? 1 : -1;
@@ -157,7 +165,7 @@ public class BattleThread extends Thread {
     				new PointF(c1 * mCanvasWidth / 2, c2 * mCanvasHeight / 2),
     				new PointF(-c1 * 0.7f, -c2 * 0.8f)));
        }
-        
+
 		// Add new fliers, purge dead ones.
 		synchronized (newFliers) {
 			for (Flier flier : newFliers) {
@@ -171,9 +179,8 @@ public class BattleThread extends Thread {
 			}
 			deadFliers.clear();
 		}
-
 	}
-	
+
 	public PointF toInternalCoords(PointF p) {
 		return new PointF((p.x - mCanvasWidth / 2) / mVisualScale, (p.y - mCanvasHeight / 2) / mVisualScale);
 	}
@@ -183,9 +190,7 @@ public class BattleThread extends Thread {
 		Enemy nearest = null;
 		for (Flier flier : fliers) {
 			if (flier instanceof Enemy) {
-				PointF flier_pos = flier.getPosition();
-				PointF delta = new PointF(flier_pos.x - p.x, flier_pos.y - p.y);
-				float d = delta.length();
+				float d = PointF.length(flier.position.x - p.x, flier.position.y - p.y);
 				if (d < nearest_d) {
 					nearest_d = d;
 					nearest = (Enemy)flier;
@@ -196,8 +201,7 @@ public class BattleThread extends Thread {
 	}
 	
 	public void vibrate() {
-		Vibrator v = (Vibrator)mContext.getSystemService(Context.VIBRATOR_SERVICE);
-		v.vibrate(200);
+		vibrator.vibrate(200);
 	}
 	
     /* Callback invoked when the surface dimensions change. */

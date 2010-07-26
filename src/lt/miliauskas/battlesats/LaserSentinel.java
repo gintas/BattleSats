@@ -3,6 +3,7 @@ package lt.miliauskas.battlesats;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.util.FloatMath;
 
 public class LaserSentinel extends Flier {
 	
@@ -18,34 +19,39 @@ public class LaserSentinel extends Flier {
 	
 	protected int state = STATE_IDLE;
 	
+	protected Paint bodyPaint = new Paint();
+	protected Paint laserPaint = new Paint();
+	
 	public LaserSentinel(BattleThread thread, float mass, PointF position,
 			PointF velocity) {
 		super(thread, mass, position, velocity);
+		
+		bodyPaint.setARGB(255, (state == STATE_IDLE) ? 120 : 255, 180, 0);
+		laserPaint.setARGB(90, 0, 200, 200);
 	}
 
 	@Override
 	public void draw(Canvas canvas) {
-		Paint p = new Paint();
-		p.setARGB(255, (state == STATE_IDLE) ? 120 : 255, 180, 0);
 		canvas.save();
 		canvas.translate(position.x, position.y);
 		
 		if (target != null) {
-			PointF targetPos = target.getPosition();
-			PointF d = new PointF(targetPos.x - position.x, targetPos.y - position.y);
-			float angle = (float)Math.atan2(d.x, d.y);
+			float d_x = target.position.x - position.x;
+			float d_y = target.position.y - position.y;
+			float angle = (float)Math.atan2(d_x, d_y);
 			canvas.rotate(-angle * 180.0f / (float)Math.PI);
 			if (state == STATE_FIRING) {
 				// Draw laser beam.
-				Paint laserPaint = new Paint();
-				laserPaint.setARGB(90, 0, 200, 200);
 				canvas.drawRect(
 						-BattleSats.LASER_BEAM_RADIUS, HEIGHT/2,
-						BattleSats.LASER_BEAM_RADIUS, d.length(),
+						BattleSats.LASER_BEAM_RADIUS, PointF.length(d_x, d_y),
 						laserPaint);
 			}
 		}
-		canvas.drawRect(-WIDTH/2, -HEIGHT/2, WIDTH/2, HEIGHT/2, p);
+		
+		// Draw body.
+		canvas.drawRect(-WIDTH/2, -HEIGHT/2, WIDTH/2, HEIGHT/2, bodyPaint);
+
 		canvas.restore();
 	}
 
@@ -56,8 +62,7 @@ public class LaserSentinel extends Flier {
 		state = STATE_IDLE;
 		target = thread.findNearestEnemy(position);
 		if (target != null) {
-			PointF target_pos = target.getPosition();
-			float dist = new PointF(target_pos.x - position.x, target_pos.y - position.y).length();
+			float dist = PointF.length(target.position.x - position.x, target.position.y - position.y);
 			if (dist <= range) {
 				state = STATE_FIRING;
 				target.hurt(elapsed * damage / 1000.0f);
