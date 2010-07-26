@@ -9,11 +9,26 @@ public class EnemyBomber extends Enemy {
 
 	protected RectF ovalFrame = new RectF();
 	protected Paint bomberPaint = new Paint();
+	protected int millisSinceLastBomb = 0;
 
 	public EnemyBomber(BattleThread thread, float mass, PointF position,
 			PointF velocity) {
 		super(thread, mass, position, velocity);
 		bomberPaint.setARGB(255, 128, 0, 128);
+		health = BattleSats.BOMBER_HEALTH;
+	}
+
+	@Override
+	public void updatePosition(long elapsed) {
+		super.updatePosition(elapsed);
+		
+		millisSinceLastBomb += elapsed;
+		if (millisSinceLastBomb > 3000) {
+			thread.addFlier(new EnemyBomb(thread, 1.0f, new PointF(position.x, position.y),
+					new PointF(-position.x / 20.0f, -position.y / 20.0f)));
+			// TODO: randomize velocity a little
+			millisSinceLastBomb = 0;
+		}
 	}
 
 	@Override
