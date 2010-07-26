@@ -8,15 +8,11 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.os.Vibrator;
 import android.view.SurfaceHolder;
-import android.view.View;
 
 public class BattleThread extends Thread {
 

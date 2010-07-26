@@ -1,9 +1,7 @@
 package lt.miliauskas.battlesats;
 
 import android.content.Context;
-import android.graphics.PointF;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder.Callback;

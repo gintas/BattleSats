@@ -1,10 +1,8 @@
 package lt.miliauskas.battlesats;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
-import android.os.Vibrator;
 
 public class EnemyBomb extends Enemy {
 	
