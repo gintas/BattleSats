@@ -17,17 +17,17 @@ public class BattleSats extends Activity {
 	/*
 	 * Physics constants
 	 */
-	public static final float MASS_G = 15.0f; // gravitational constant
+	public static final float MASS_G = 2.0f; // gravitational constant
 	public static final float MASS_EARTH = 1000.0f;
 	public static final float MASS_SATELLITE = 1.0f;
 	
 	/*
 	 * Constants for visuals
 	 */
-	public static final int EARTH_SIZE_QUOTIENT = 5;
+	public static final int EARTH_SIZE_QUOTIENT = 10;
 	
 	/** How many pixels to drag onscreen to give a flier a velocity of 1 */
-	public static final float DRAG_VELOCITY_RATIO = 70.0f;
+	public static final float DRAG_VELOCITY_RATIO = 5.0f;
 	
 	BattleView battleView;
 	

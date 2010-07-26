@@ -48,8 +48,7 @@ public class LaserSentinel extends Flier {
 	}
 
 	@Override
-	public void updatePosition(double elapsed) {
-		// TODO Auto-generated method stub
+	public void updatePosition(long elapsed) {
 		super.updatePosition(elapsed);
 		
 		state = STATE_IDLE;
@@ -59,7 +58,7 @@ public class LaserSentinel extends Flier {
 			float dist = new PointF(target_pos.x - position.x, target_pos.y - position.y).length();
 			if (dist <= range) {
 				state = STATE_FIRING;
-				target.hurt(elapsed * damage);
+				target.hurt(elapsed * damage / 1000.0f);
 			}
 		}
 	}

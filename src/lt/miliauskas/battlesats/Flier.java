@@ -4,12 +4,13 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.util.FloatMath;
 import android.util.Log;
 
 public abstract class Flier {
 
 	/** Mass of the object */
-	protected double mass = 1.0f;
+	protected float mass = 1.0f;
 	
 	/** Position */
 	protected PointF position;
@@ -32,20 +33,21 @@ public abstract class Flier {
 		this.velocity = velocity;
 	}
 	
-	public void updatePosition(double elapsed) {
+	public void updatePosition(long elapsed) {
 		/* Update satellite coordinates */
-		// TODO: elapsed
-		float r2 = (position.x * position.x + position.y * position.y);
-		float f = (float)(BattleSats.MASS_G * BattleSats.MASS_EARTH * mass / r2) * (float)elapsed;
-		float r = (float)Math.sqrt(r2);
-		PointF dv = new PointF((position.x / r * f), (position.y / r * f));
-		dv.negate();
-		velocity.offset(dv.x, dv.y);
-		position.offset(velocity.x, velocity.y);
+//		for (int i = 0; i < elapsed; i++) {
+			float r = position.length();
+			float m = BattleSats.MASS_G * BattleSats.MASS_EARTH / (r * r);
+			PointF dv = new PointF((m * position.x / r), (m * position.y / r));
+			dv.negate();
+			velocity.offset(dv.x, dv.y);
+			position.offset(velocity.x * elapsed / 1000.0f, velocity.y * elapsed / 1000.0f);
 		
-		if (position.length() < thread.earthRadius) {
-			destroy();
-		}
+			if (position.length() < thread.earthRadius) {
+				destroy();
+//				break;
+			}
+//		}
 	}
 	
 	public void destroy() {

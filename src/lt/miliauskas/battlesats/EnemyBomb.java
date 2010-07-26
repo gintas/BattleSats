@@ -23,10 +23,11 @@ public class EnemyBomb extends Enemy {
 	}
 
 	@Override
-	public void updatePosition(double elapsed) {
+	public void updatePosition(long elapsed) {
 		super.updatePosition(elapsed);
 		if (position.length() < thread.earthRadius) {
-			thread.vibrate();
+			//thread.vibrate();
+			// TODO: decrease earth health
 		}
 	}
 
