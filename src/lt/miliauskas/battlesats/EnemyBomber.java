@@ -30,7 +30,7 @@ public class EnemyBomber extends Enemy {
 			float dx = random.nextFloat() * 6.0f - 3.0f;
 			float dy = random.nextFloat() * 6.0f - 3.0f;
 			thread.addFlier(new EnemyBomb(thread, 1.0f, new PointF(position.x, position.y),
-					new PointF(-position.x / 20.0f + dx, -position.y / 20.0f + dy)));
+					new PointF(-position.x / 25.0f + dx, -position.y / 25.0f + dy)));
 			millisSinceLastBomb -= BattleSats.BOMBER_INTERVAL;
 		}
 	}
