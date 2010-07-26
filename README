@@ -1,0 +1,16 @@
+Battle Sats
+===========
+
+Author: Gintautas Miliauskas <gintautas@miliauskas.lt>
+
+Battle Sats is a game for the Android platform.
+
+The game requires Android 2.1 (API level 7) to run.  It should run on pretty
+much any hardware, even the older models.
+
+Swipe the screen to launch a satellite. The longer the swipe, the higher
+the initial velocity. Pinch to zoom in/out.
+
+Battle Sats is written in Java (using Eclipse).  It uses some bits from the
+Lunar Lander sample included with the Android SDK.  Feel free to look around
+the source code.
