@@ -57,7 +57,6 @@ public class BattleThread extends Thread {
 	private Bitmap mBackgroundImage;
 	
 	private Drawable mEarth;
-	public int earthRadius;
 	
 	private List<Flier> fliers = new LinkedList<Flier>();
 	private List<Flier> newFliers = new LinkedList<Flier>();
@@ -240,7 +239,9 @@ public class BattleThread extends Thread {
 		canvas.translate(mCanvasWidth / 2, mCanvasHeight / 2);
 		canvas.scale(mVisualScale, mVisualScale);
 
-		mEarth.setBounds(-earthRadius, -earthRadius, earthRadius, earthRadius);
+		mEarth.setBounds(
+				-BattleSats.EARTH_RADIUS, -BattleSats.EARTH_RADIUS,
+				BattleSats.EARTH_RADIUS, BattleSats.EARTH_RADIUS);
 		mEarth.draw(canvas);
 		
 		synchronized (fliers) {

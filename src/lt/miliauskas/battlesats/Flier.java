@@ -33,7 +33,7 @@ public abstract class Flier {
 		velocity.offset(-dv_x, -dv_y);
 		position.offset(velocity.x * elapsed / 1000.0f, velocity.y * elapsed / 1000.0f);
 	
-		if (position.length() < thread.earthRadius) {
+		if (position.length() < BattleSats.EARTH_RADIUS) {
 			destroy();
 		}
 	}
