@@ -137,10 +137,16 @@ public class BattleThread extends Thread {
     }
 
     private void addInitialFliers() {
-		addFlier(new LaserSentinel(this, new PointF(100.0f, 0.0f), new PointF(0.0f, -30f)));
-		addFlier(new LaserSentinel(this, new PointF(-100.0f, 0.0f), new PointF(0.0f, 30f)));
-		addFlier(new LaserSentinel(this, new PointF(0.0f, 100.0f), new PointF(30.0f, 0.0f)));
-		addFlier(new LaserSentinel(this, new PointF(0.0f, -100.0f), new PointF(-30.0f, 0.0f)));
+    	PointF p = new PointF();
+    	PointF v = new PointF();
+    	Flier.stationaryOrbitParams(100.0f, 0.0f, false, p, v);
+		addFlier(new LaserSentinel(this, p, v));
+    	Flier.stationaryOrbitParams(100.0f, (float)Math.PI / 2.0f, false, p, v);
+		addFlier(new LaserSentinel(this, p, v));
+    	Flier.stationaryOrbitParams(100.0f, (float)Math.PI, false, p, v);
+		addFlier(new LaserSentinel(this, p, v));
+    	Flier.stationaryOrbitParams(100.0f, (float)Math.PI * 3.0f / 2.0f, false, p, v);
+		addFlier(new LaserSentinel(this, p, v));
 
 		addFlier(new EnemyBomber(this, new PointF(400.0f, -400.0f), new PointF(10.0f, 10.0f)));
 		addFlier(new EnemyBomber(this, new PointF(-440.0f, 400.0f), new PointF(-10.0f, -10.0f)));
