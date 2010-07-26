@@ -20,7 +20,6 @@ public class BattleSats extends Activity {
 	 */
 	public static final float MASS_G = 2.0f; // gravitational constant
 	public static final float MASS_EARTH = 1000.0f;
-	public static final float MASS_SATELLITE = 1.0f;
 	
 	/*
 	 * Constants for visuals

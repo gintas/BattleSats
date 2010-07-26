@@ -11,9 +11,8 @@ public class EnemyBomber extends Enemy {
 	protected Paint bomberPaint = new Paint();
 	protected int millisSinceLastBomb = 0;
 
-	public EnemyBomber(BattleThread thread, float mass, PointF position,
-			PointF velocity) {
-		super(thread, mass, position, velocity);
+	public EnemyBomber(BattleThread thread, PointF position, PointF velocity) {
+		super(thread, position, velocity);
 		bomberPaint.setARGB(255, 128, 0, 128);
 		health = BattleSats.BOMBER_HEALTH;
 	}

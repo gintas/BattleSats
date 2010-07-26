@@ -12,7 +12,7 @@ public class EnemyBomb extends Enemy {
 	
 	public EnemyBomb(BattleThread thread, float mass, PointF position,
 			PointF velocity) {
-		super(thread, mass, position, velocity);
+		super(thread, position, velocity);
 		health = BattleSats.BOMB_HEALTH;
 		bombPaint.setARGB(255, 255, 0, 0);
 	}

@@ -107,7 +107,7 @@ public class BattleView extends SurfaceView implements Callback {
 				PointF v = new PointF(
 						(motionEndPos.x - motionStartPos.x) / BattleSats.DRAG_VELOCITY_RATIO,
 						(motionEndPos.y - motionStartPos.y) / BattleSats.DRAG_VELOCITY_RATIO);
-				Flier f = new LaserSentinel(thread, BattleSats.MASS_SATELLITE, thread.toInternalCoords(motionStartPos), v);
+				Flier f = new LaserSentinel(thread, thread.toInternalCoords(motionStartPos), v);
 				thread.addFlier(f);
 			}
 		}

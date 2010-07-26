@@ -9,9 +9,6 @@ import android.util.Log;
 
 public abstract class Flier {
 
-	/** Mass of the object */
-	protected float mass = 1.0f;
-	
 	/** Position */
 	public PointF position;
 	
@@ -22,9 +19,8 @@ public abstract class Flier {
 	
 	protected BattleThread thread;
 
-	public Flier(BattleThread thread, float mass, PointF position, PointF velocity) {
+	public Flier(BattleThread thread, PointF position, PointF velocity) {
 		this.thread = thread;
-		this.mass = mass;
 		this.position = position;
 		this.velocity = velocity;
 	}

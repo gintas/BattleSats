@@ -78,14 +78,15 @@ public class BattleThread extends Thread {
     }
     
     private void addInitialFliers() {
-		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(100.0f, 0.0f), new PointF(0.0f, -30f)));
-		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(-100.0f, 0.0f), new PointF(0.0f, 30f)));
-		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(0.0f, 100.0f), new PointF(30.0f, 0.0f)));
-		addFlier(new LaserSentinel(this, BattleSats.MASS_SATELLITE, new PointF(0.0f, -100.0f), new PointF(-30.0f, 0.0f)));
-		addFlier(new EnemyBomber(this, BattleSats.MASS_SATELLITE, new PointF(400.0f, -400.0f), new PointF(10.0f, 10.0f)));
-		addFlier(new EnemyBomber(this, BattleSats.MASS_SATELLITE, new PointF(-440.0f, 400.0f), new PointF(-10.0f, -10.0f)));
-		addFlier(new EnemyBomber(this, BattleSats.MASS_SATELLITE, new PointF(-360.0f, 400.0f), new PointF(-10.0f, -10.0f)));
-		addFlier(new EnemyBomber(this, BattleSats.MASS_SATELLITE, new PointF(-400.0f, 440.0f), new PointF(-10.0f, -10.0f)));
+		addFlier(new LaserSentinel(this, new PointF(100.0f, 0.0f), new PointF(0.0f, -30f)));
+		addFlier(new LaserSentinel(this, new PointF(-100.0f, 0.0f), new PointF(0.0f, 30f)));
+		addFlier(new LaserSentinel(this, new PointF(0.0f, 100.0f), new PointF(30.0f, 0.0f)));
+		addFlier(new LaserSentinel(this, new PointF(0.0f, -100.0f), new PointF(-30.0f, 0.0f)));
+
+		addFlier(new EnemyBomber(this, new PointF(400.0f, -400.0f), new PointF(10.0f, 10.0f)));
+		addFlier(new EnemyBomber(this, new PointF(-440.0f, 400.0f), new PointF(-10.0f, -10.0f)));
+		addFlier(new EnemyBomber(this, new PointF(-360.0f, 400.0f), new PointF(-10.0f, -10.0f)));
+		addFlier(new EnemyBomber(this, new PointF(-400.0f, 440.0f), new PointF(-10.0f, -10.0f)));
     }
 	
 	@Override
