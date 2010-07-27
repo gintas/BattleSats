@@ -8,7 +8,9 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -54,6 +56,8 @@ public class BattleThread extends Thread {
 	
 	private Drawable mEarth;
 	
+	private float earthHealth;
+	
 	private List<Flier> fliers = new LinkedList<Flier>();
 	private List<Flier> newFliers = new LinkedList<Flier>();
 	private List<Flier> deadFliers = new LinkedList<Flier>();
@@ -72,8 +76,22 @@ public class BattleThread extends Thread {
         // we don't need to transform it and it's faster to draw this way
         mBackgroundImage = BitmapFactory.decodeResource(res,
                 R.drawable.stars);
-        
+ 
         mEarth = res.getDrawable(R.drawable.bluemarble);
+        
+		healthBarPaint.setARGB(150, 0, 255, 0);
+		healthBarPaint.setAntiAlias(true);
+		healthBarEmptyPaint.setARGB(50, 0, 255, 0);
+		healthBarEmptyPaint.setAntiAlias(true);
+    }
+    
+    public void hurtEarth(float damage) {
+        synchronized (mSurfaceHolder) {
+        	earthHealth -= damage;
+        	if (earthHealth <= 0) {
+        		setState(STATE_LOSE);
+        	}
+        }
     }
     
     /**
@@ -83,6 +101,7 @@ public class BattleThread extends Thread {
         synchronized (mSurfaceHolder) {
         	addInitialFliers();
             mLastTime = System.currentTimeMillis();
+            earthHealth = BattleSats.EARTH_HEALTH;
             setState(STATE_RUNNING);
         }
     }
@@ -237,15 +256,41 @@ public class BattleThread extends Thread {
 			deadFliers.add(f);
 		}
     }
+    
+    private RectF healthBarFull = new RectF();
+    private RectF healthBarEmpty = new RectF();
+	private Paint healthBarPaint = new Paint();
+	private Paint healthBarEmptyPaint = new Paint();
 
+    private void drawHealthBar(Canvas canvas) {
+		// Draw health of Earth
+		float healthBarWidth = mCanvasWidth / 2;
+		float top = mCanvasHeight - BattleSats.HEALTH_BAR_HEIGHT - BattleSats.HEALTH_BAR_PADDING_BOTTOM;
+		float bottom = mCanvasHeight - BattleSats.HEALTH_BAR_PADDING_BOTTOM;
+		float left = (mCanvasWidth / 2) - (healthBarWidth / 2);
+		float right = left + healthBarWidth * earthHealth / BattleSats.EARTH_HEALTH;
+		healthBarFull.set(left, top, right, bottom);
+		canvas.drawRect(healthBarFull, healthBarPaint);
+		
+		if (earthHealth < BattleSats.EARTH_HEALTH) {
+			healthBarEmpty.set(
+					right, top,
+					(mCanvasWidth / 2) + (healthBarWidth / 2), bottom);
+			canvas.drawRect(healthBarEmpty, healthBarEmptyPaint);
+		}
+    }
+    
 	private void doDraw(Canvas canvas) {
 		// Draw background.
 		canvas.drawBitmap(mBackgroundImage, 0, 0, null);
+		
+		canvas.save();
 		
 		// Prepare for drawing objects: set the center of the screen to be (0, 0);
 		canvas.translate(mCanvasWidth / 2, mCanvasHeight / 2);
 		canvas.scale(mVisualScale, mVisualScale);
 
+		// Draw Earth
 		mEarth.setBounds(
 				-BattleSats.EARTH_RADIUS, -BattleSats.EARTH_RADIUS,
 				BattleSats.EARTH_RADIUS, BattleSats.EARTH_RADIUS);
@@ -256,6 +301,10 @@ public class BattleThread extends Thread {
 				flier.draw(canvas);
 			}
 		}
+
+		canvas.restore();
+		// Draw HUD items.
+		drawHealthBar(canvas);
 	}
 
 	private void updatePhysics() {

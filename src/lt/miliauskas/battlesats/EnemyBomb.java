@@ -26,7 +26,7 @@ public class EnemyBomb extends Enemy {
 		super.updatePosition(elapsed);
 		if (position.length() < BattleSats.EARTH_RADIUS) {
 			//thread.vibrate();
-			// TODO: decrease earth health
+			thread.hurtEarth(BattleSats.BOMB_DAMAGE);
 		}
 	}
 
