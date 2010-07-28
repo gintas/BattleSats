@@ -48,8 +48,9 @@ public class EnemyBomber extends Flier {
 				position.x - BattleSats.BOMBER_WIDTH, position.y - BattleSats.BOMBER_HEIGHT,
 				position.x + BattleSats.BOMBER_WIDTH, position.y + BattleSats.BOMBER_HEIGHT);
 		canvas.drawOval(ovalFrame, bomberPaint);
-		
+
 		canvas.save();
+		canvas.translate(position.x, position.y);
 		laser.rotateCanvas(canvas);
 		laser.draw(canvas);
 		canvas.restore();
