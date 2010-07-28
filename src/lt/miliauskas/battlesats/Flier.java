@@ -30,19 +30,20 @@ public abstract class Flier {
 		velocity.offset(-dv_x * elapsed / 1000.0f, -dv_y * elapsed / 1000.0f);
 		position.offset(velocity.x * elapsed / 1000.0f, velocity.y * elapsed / 1000.0f);
 	
-		if (position.length() < BattleSats.EARTH_RADIUS) {
-			destroy();
+		if (position.length() < BattleSats.EARTH_RADIUS && !(this instanceof Explosion)) {
+			explode();
 		}
 	}
 	
-	public void destroy() {
+	public void explode() {
+		thread.addFlier(new Explosion(thread, position, velocity));
 		thread.removeFlier(this);
 	}
 	
 	public void hurt(double damage) {
 		health -= damage;
 		if (health < 0.0f)
-			destroy();
+			explode();
 	}
 	
 	/*

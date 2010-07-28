@@ -14,6 +14,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class BattleThread extends Thread {
@@ -314,8 +315,6 @@ public class BattleThread extends Thread {
 			flier.updatePosition(elapsed);
 		}
 		
-        mLastTime = now;
-        
 		// Add new fliers, purge dead ones.
 		synchronized (newFliers) {
 			for (Flier flier : newFliers) {
@@ -329,8 +328,10 @@ public class BattleThread extends Thread {
 			}
 			deadFliers.clear();
 		}
-	}
 
+        mLastTime = now;
+    }
+	
 	public PointF toInternalCoords(PointF p) {
 		return new PointF((p.x - mCanvasWidth / 2) / mVisualScale, (p.y - mCanvasHeight / 2) / mVisualScale);
 	}
