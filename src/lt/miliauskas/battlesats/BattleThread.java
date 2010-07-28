@@ -69,6 +69,7 @@ public class BattleThread extends Thread {
 	private Paint healthBarPaint = new Paint();
 	private Paint healthBarEmptyPaint = new Paint();
 	private Paint reserveSatellitesNumPaint = new Paint();
+	private Paint statusPaint = new Paint();
 
 	private Tracer tracer;
 	private boolean traceVisible = false;
@@ -96,11 +97,18 @@ public class BattleThread extends Thread {
 		healthBarPaint.setAntiAlias(true);
 		healthBarEmptyPaint.setARGB(50, 0, 255, 0);
 		healthBarEmptyPaint.setAntiAlias(true);
+		
 		reserveSatellitesNumPaint.setARGB(200, 120, 120, 0);
 		reserveSatellitesNumPaint.setAntiAlias(true);
 		reserveSatellitesNumPaint.setTextSize(30);
 		reserveSatellitesNumPaint.setStyle(Paint.Style.FILL);
 		reserveSatellitesNumPaint.setTextAlign(Paint.Align.RIGHT);
+		
+		statusPaint.setARGB(150, 255, 255, 0);
+		statusPaint.setAntiAlias(true);
+		statusPaint.setTextSize(50);
+		statusPaint.setStyle(Paint.Style.FILL);
+		statusPaint.setTextAlign(Paint.Align.CENTER);
     }
     
     public void hurtEarth(float damage) {
@@ -279,6 +287,12 @@ public class BattleThread extends Thread {
 	private void doDraw(Canvas canvas) {
 		// Draw background.
 		canvas.drawBitmap(mBackgroundImage, 0, 0, null);
+		
+		String text = null;
+		if (mMode == STATE_PAUSE) text = "Paused";
+		else if (mMode == STATE_LOSE) text = "Game over";
+		if (text != null)
+			canvas.drawText(text, mCanvasWidth / 2, mCanvasHeight / 2, statusPaint);
 		
 		canvas.save();
 		
