@@ -14,8 +14,11 @@ public class BattleSats extends Activity {
 	public static final float BOMB_DAMAGE = 5.0f;
 	public static final float BOMBER_HEALTH = 1000.0f;
 	public static final float BOMBER_INTERVAL = 3000; // ms
+	public static final float BOMBER_LASER_RANGE = 200.0f; // ms
+	public static final float BOMBER_LASER_DAMAGE = 5.0f; // ms
 	public static final float LASER_DAMAGE = 1.0f; // HP / ms
 	public static final float LASER_RANGE = 100.0f;
+	public static final float LASER_SENTINEL_HEALTH = 20.0f;
 	public static final int EARTH_RADIUS = 30;
 	public static final float EARTH_HEALTH = 100.0f;
 	public static final int USER_SATELLITES = 5;
@@ -29,6 +32,7 @@ public class BattleSats extends Activity {
 	 * Constants for visuals
 	 */
 	public static final int LASER_BEAM_RADIUS = 2;
+	public static final int BOMBER_LASER_BEAM_RADIUS = 5;
 	public static final float BOMB_RADIUS = 5.0f;
 	public static final float BOMBER_WIDTH = 25.0f;
 	public static final float BOMBER_HEIGHT = 10.0f;

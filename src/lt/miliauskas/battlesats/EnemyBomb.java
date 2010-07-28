@@ -11,7 +11,7 @@ public class EnemyBomb extends Flier {
 	public EnemyBomb(BattleThread thread, float mass, PointF position,
 			PointF velocity) {
 		super(thread, position, velocity);
-		this.type = TYPE_ENEMY;
+		this.type = TYPE_ATTACKER;
 		health = BattleSats.BOMB_HEALTH;
 		bombPaint.setAntiAlias(true);
 		bombPaint.setARGB(255, 255, 0, 0);
