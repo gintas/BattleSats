@@ -101,7 +101,7 @@ public class BattleThread extends Thread {
         synchronized (mSurfaceHolder) {
         	earthHealth -= damage;
         	if (earthHealth <= 0) {
-        		setState(STATE_LOSE);
+        		setMode(STATE_LOSE);
         	}
         }
     }
@@ -115,7 +115,7 @@ public class BattleThread extends Thread {
             mLastTime = System.currentTimeMillis();
             earthHealth = BattleSats.EARTH_HEALTH;
             reserveSatellites = BattleSats.USER_SATELLITES;
-            setState(STATE_RUNNING);
+            setMode(STATE_RUNNING);
         }
     }
 
@@ -124,7 +124,7 @@ public class BattleThread extends Thread {
      */
     public void pause() {
         synchronized (mSurfaceHolder) {
-            if (mMode == STATE_RUNNING) setState(STATE_PAUSE);
+            if (mMode == STATE_RUNNING) setMode(STATE_PAUSE);
         }
     }
     
@@ -136,7 +136,7 @@ public class BattleThread extends Thread {
         synchronized (mSurfaceHolder) {
             mLastTime = System.currentTimeMillis() + 100;
         }
-        setState(STATE_RUNNING);
+        setMode(STATE_RUNNING);
     }
 
     /**
@@ -146,7 +146,7 @@ public class BattleThread extends Thread {
      */
     public synchronized void restoreState(Bundle savedState) {
         synchronized (mSurfaceHolder) {
-            setState(STATE_PAUSE);
+            setMode(STATE_PAUSE);
             // TODO
         }
     }
@@ -225,35 +225,17 @@ public class BattleThread extends Thread {
      * Sets the game mode. That is, whether we are running, paused, in the
      * failure state, in the victory state, etc.
      * 
-     * @see #setState(int, CharSequence)
+     * @see #setMode(int, CharSequence)
      * @param mode one of the STATE_* constants
      */
-    public void setState(int mode) {
+    public void setMode(int mode) {
         synchronized (mSurfaceHolder) {
-            setState(mode, null);
+            mMode = mode;
         }
     }
     
-    /**
-     * Sets the game mode. That is, whether we are running, paused, in the
-     * failure state, in the victory state, etc.
-     * 
-     * @param mode one of the STATE_* constants
-     * @param message string to add to screen or null
-     */
-    public void setState(int mode, CharSequence message) {
-        /*
-         * This method optionally can cause a text message to be displayed
-         * to the user when the mode changes. Since the View that actually
-         * renders that text is part of the main View hierarchy and not
-         * owned by this thread, we can't touch the state of that View.
-         * Instead we use a Message + Handler to relay commands to the main
-         * thread, which updates the user-text View.
-         */
-        synchronized (mSurfaceHolder) {
-            mMode = mode;
-            // TODO: reflect state in UI
-        }
+    public int getMode() {
+    	return mMode;
     }
 
     public void addFlier(Flier f) {

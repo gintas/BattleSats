@@ -47,7 +47,9 @@ public class TouchHandler implements OnTouchListener {
 				pointerState = POINTER_STATE_AFTER_RESIZE;
 			}
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
-			if (pointerState == POINTER_STATE_LAUNCHING) {
+			if (thread.getMode() == BattleThread.STATE_PAUSE) {
+				thread.unpause();
+			} else if (pointerState == POINTER_STATE_LAUNCHING) {
 				// Launch a new satellite.
 				PointF motionEndPos = new PointF(event.getX(), event.getY());
 				PointF v = new PointF(
@@ -55,6 +57,7 @@ public class TouchHandler implements OnTouchListener {
 						(motionEndPos.y - motionStartPos.y) / BattleSats.DRAG_VELOCITY_RATIO);
 				thread.launchSat(thread.toInternalCoords(motionStartPos), v);
 			}
+			pointerState = POINTER_STATE_IDLE;
 		}
 		return true;
 	}

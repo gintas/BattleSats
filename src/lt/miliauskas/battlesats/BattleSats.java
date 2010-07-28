@@ -10,7 +10,7 @@ public class BattleSats extends Activity {
 	/*
 	 * Gameplay constants
 	 */
-	public static final float BOMB_HEALTH = 2.0f;
+	public static final float BOMB_HEALTH = 1.0f;
 	public static final float BOMB_DAMAGE = 5.0f;
 	public static final float BOMBER_HEALTH = 1000.0f;
 	public static final float BOMBER_INTERVAL = 3000; // ms
@@ -60,9 +60,10 @@ public class BattleSats extends Activity {
         battleView = (BattleView)findViewById(R.id.battle);
         BattleThread thread = battleView.getThread();
 
+        Log.i("BattleSats", "onCreate");
         if (savedInstanceState == null) {
             // we were just launched: set up a new game
-            thread.setState(BattleThread.STATE_READY);
+            thread.setMode(BattleThread.STATE_READY);
         } else {
             // we are being restored: resume a previous game
             thread.restoreState(savedInstanceState);
@@ -77,6 +78,7 @@ public class BattleSats extends Activity {
     protected void onPause() {
         super.onPause();
         battleView.getThread().pause(); // pause game when Activity pauses
+        Log.i("BattleSats", "onPause");
     }
 
     /**
