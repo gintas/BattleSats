@@ -393,4 +393,12 @@ public class BattleThread extends Thread {
 	public void hideTrace() {
 		traceVisible = false;
 	}
+
+	public void setVisualScale(float f) {
+		if (f < BattleSats.SCALE_MIN)
+			f = BattleSats.SCALE_MIN;
+		else if (f > BattleSats.SCALE_MAX)
+			f = BattleSats.SCALE_MAX;
+		mVisualScale = f;		
+	}
 }

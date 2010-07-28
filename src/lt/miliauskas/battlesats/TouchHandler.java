@@ -33,7 +33,7 @@ public class TouchHandler implements OnTouchListener {
 		} else if (action == MotionEvent.ACTION_MOVE) {
 			// Pointer move.
 			if (pointerState == POINTER_STATE_RESIZING) {
-				thread.mVisualScale = multitouchInitialScale * multitouchLength(event) / multitouchInitialLength;
+				thread.setVisualScale(multitouchInitialScale * multitouchLength(event) / multitouchInitialLength);
 			} else if (pointerState == POINTER_STATE_LAUNCHING) {
 				motionEndPos.set(event.getX(), event.getY());
 				motionVelocity.set(

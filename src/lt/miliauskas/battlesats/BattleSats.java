@@ -34,6 +34,8 @@ public class BattleSats extends Activity {
 	public static final float BOMBER_HEIGHT = 10.0f;
 	public static final float HEALTH_BAR_HEIGHT = 10.0f;
 	public static final float HEALTH_BAR_PADDING = 10.0f;
+	public static final float SCALE_MIN = 0.2f;
+	public static final float SCALE_MAX = 3.0f;
 	
 	/** How many pixels to drag onscreen to give a flier a velocity of 1 */
 	public static final float DRAG_VELOCITY_RATIO = 8.0f;
