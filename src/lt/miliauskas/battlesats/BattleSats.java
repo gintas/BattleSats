@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
+import android.view.WindowManager;
 
 public class BattleSats extends Activity {
 
@@ -61,9 +62,12 @@ public class BattleSats extends Activity {
         super.onCreate(savedInstanceState);
         // turn off the window's title bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        		WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.main);
         
         battleView = (BattleView)findViewById(R.id.battle);
+        
         BattleThread thread = battleView.getThread();
 
         Log.i("BattleSats", "onCreate");
