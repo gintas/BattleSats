@@ -58,6 +58,8 @@ public class TouchHandler implements OnTouchListener {
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
 			if (thread.getMode() == BattleThread.STATE_PAUSE) {
 				thread.unpause();
+			} else if (thread.getMode() == BattleThread.STATE_LOSE) {
+				thread.doStart();
 			} else if (pointerState == POINTER_STATE_LAUNCHING) {
 				// Launch a new satellite.
 				motionEndPos.set(event.getX(), event.getY());
