@@ -38,7 +38,7 @@ public class BattleSats extends Activity {
 	public static final float SCALE_MAX = 3.0f;
 	
 	/** How many pixels to drag onscreen to give a flier a velocity of 1 */
-	public static final float DRAG_VELOCITY_RATIO = 10.0f;
+	public static final float DRAG_VELOCITY_RATIO = 5.0f;
 	
 	/*
      * State-tracking constants
