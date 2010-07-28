@@ -288,12 +288,6 @@ public class BattleThread extends Thread {
 		// Draw background.
 		canvas.drawBitmap(mBackgroundImage, 0, 0, null);
 		
-		String text = null;
-		if (mMode == STATE_PAUSE) text = "Paused";
-		else if (mMode == STATE_LOSE) text = "Game over";
-		if (text != null)
-			canvas.drawText(text, mCanvasWidth / 2, mCanvasHeight / 2, statusPaint);
-		
 		canvas.save();
 		
 		// Prepare for drawing objects: set the center of the screen to be (0, 0);
@@ -325,6 +319,13 @@ public class BattleThread extends Thread {
 				mCanvasWidth - BattleSats.HEALTH_BAR_PADDING,
 				mCanvasHeight - BattleSats.HEALTH_BAR_PADDING,
 				reserveSatellitesNumPaint);
+		
+		String statusText = null;
+		if (mMode == STATE_PAUSE) statusText = "Paused";
+		else if (mMode == STATE_LOSE) statusText = "Game over";
+		if (statusText != null)
+			canvas.drawText(statusText, mCanvasWidth / 2, mCanvasHeight / 2, statusPaint);
+		
 	}
 	
 	private void updatePhysics() {
