@@ -53,8 +53,7 @@ public class TouchHandler implements OnTouchListener {
 				PointF v = new PointF(
 						(motionEndPos.x - motionStartPos.x) / BattleSats.DRAG_VELOCITY_RATIO,
 						(motionEndPos.y - motionStartPos.y) / BattleSats.DRAG_VELOCITY_RATIO);
-				Flier f = new LaserSentinel(thread, thread.toInternalCoords(motionStartPos), v);
-				thread.addFlier(f);
+				thread.launchSat(thread.toInternalCoords(motionStartPos), v);
 			}
 		}
 		return true;

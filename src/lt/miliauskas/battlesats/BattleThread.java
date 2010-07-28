@@ -57,11 +57,18 @@ public class BattleThread extends Thread {
 	private Drawable mEarth;
 	
 	private float earthHealth;
+	private int reserveSatellites;
 	
 	private List<Flier> fliers = new LinkedList<Flier>();
 	private List<Flier> newFliers = new LinkedList<Flier>();
 	private List<Flier> deadFliers = new LinkedList<Flier>();
-	
+
+    private RectF healthBarFull = new RectF();
+    private RectF healthBarEmpty = new RectF();
+	private Paint healthBarPaint = new Paint();
+	private Paint healthBarEmptyPaint = new Paint();
+	private Paint reserveSatellitesNumPaint = new Paint();
+
 	private Vibrator vibrator;
 
     public BattleThread(SurfaceHolder surfaceHolder, Context context) {
@@ -83,6 +90,11 @@ public class BattleThread extends Thread {
 		healthBarPaint.setAntiAlias(true);
 		healthBarEmptyPaint.setARGB(50, 0, 255, 0);
 		healthBarEmptyPaint.setAntiAlias(true);
+		reserveSatellitesNumPaint.setARGB(200, 120, 120, 0);
+		reserveSatellitesNumPaint.setAntiAlias(true);
+		reserveSatellitesNumPaint.setTextSize(30);
+		reserveSatellitesNumPaint.setStyle(Paint.Style.FILL);
+		reserveSatellitesNumPaint.setTextAlign(Paint.Align.RIGHT);
     }
     
     public void hurtEarth(float damage) {
@@ -102,6 +114,7 @@ public class BattleThread extends Thread {
         	addInitialFliers();
             mLastTime = System.currentTimeMillis();
             earthHealth = BattleSats.EARTH_HEALTH;
+            reserveSatellites = BattleSats.USER_SATELLITES;
             setState(STATE_RUNNING);
         }
     }
@@ -257,16 +270,11 @@ public class BattleThread extends Thread {
 		}
     }
     
-    private RectF healthBarFull = new RectF();
-    private RectF healthBarEmpty = new RectF();
-	private Paint healthBarPaint = new Paint();
-	private Paint healthBarEmptyPaint = new Paint();
-
     private void drawHealthBar(Canvas canvas) {
 		// Draw health of Earth
 		float healthBarWidth = mCanvasWidth / 2;
-		float top = mCanvasHeight - BattleSats.HEALTH_BAR_HEIGHT - BattleSats.HEALTH_BAR_PADDING_BOTTOM;
-		float bottom = mCanvasHeight - BattleSats.HEALTH_BAR_PADDING_BOTTOM;
+		float top = mCanvasHeight - BattleSats.HEALTH_BAR_HEIGHT - BattleSats.HEALTH_BAR_PADDING;
+		float bottom = mCanvasHeight - BattleSats.HEALTH_BAR_PADDING;
 		float left = (mCanvasWidth / 2) - (healthBarWidth / 2);
 		float right = left + healthBarWidth * earthHealth / BattleSats.EARTH_HEALTH;
 		healthBarFull.set(left, top, right, bottom);
@@ -305,6 +313,10 @@ public class BattleThread extends Thread {
 		canvas.restore();
 		// Draw HUD items.
 		drawHealthBar(canvas);
+		canvas.drawText(Integer.toString(reserveSatellites),
+				mCanvasWidth - BattleSats.HEALTH_BAR_PADDING,
+				mCanvasHeight - BattleSats.HEALTH_BAR_PADDING,
+				reserveSatellitesNumPaint);
 	}
 
 	private void updatePhysics() {
@@ -371,4 +383,11 @@ public class BattleThread extends Thread {
                     mBackgroundImage, width, height, true);
         }
     }
+
+	public void launchSat(PointF position, PointF velocity) {
+		if (reserveSatellites > 0) {
+			addFlier(new LaserSentinel(this, position, velocity));
+			reserveSatellites--;
+		}
+	}
 }
