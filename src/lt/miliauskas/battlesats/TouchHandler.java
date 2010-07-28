@@ -15,6 +15,8 @@ public class TouchHandler implements OnTouchListener {
 	private BattleThread thread;
 	private int pointerState = POINTER_STATE_IDLE;
 	private PointF motionStartPos = new PointF();
+	private PointF motionEndPos = new PointF();
+	private PointF motionVelocity = new PointF();
 	private float multitouchInitialLength;
 	private float multitouchInitialScale;
 	
@@ -29,9 +31,15 @@ public class TouchHandler implements OnTouchListener {
 			pointerState = POINTER_STATE_LAUNCHING;
 			motionStartPos.set(event.getX(), event.getY());
 		} else if (action == MotionEvent.ACTION_MOVE) {
-			// Pointer move. Only interesting if we're resizing.
+			// Pointer move.
 			if (pointerState == POINTER_STATE_RESIZING) {
 				thread.mVisualScale = multitouchInitialScale * multitouchLength(event) / multitouchInitialLength;
+			} else if (pointerState == POINTER_STATE_LAUNCHING) {
+				motionEndPos.set(event.getX(), event.getY());
+				motionVelocity.set(
+						(motionEndPos.x - motionStartPos.x) / BattleSats.DRAG_VELOCITY_RATIO,
+						(motionEndPos.y - motionStartPos.y) / BattleSats.DRAG_VELOCITY_RATIO);
+				thread.showTrace(thread.toInternalCoords(motionStartPos), motionVelocity);
 			}
 		} else if (action == MotionEvent.ACTION_POINTER_2_DOWN) {
 			// 2nd pointer down, starting scaling
@@ -40,6 +48,7 @@ public class TouchHandler implements OnTouchListener {
 			if (multitouchInitialLength > 20.0f) {
 				// Avoid spurious multitouch.
 				pointerState = POINTER_STATE_RESIZING;
+				thread.hideTrace();
 			}
 		} else if ((action == MotionEvent.ACTION_POINTER_2_UP) || (action == MotionEvent.ACTION_POINTER_1_UP)) {
 			// Multitouch ended, finishing scaling.
@@ -51,13 +60,14 @@ public class TouchHandler implements OnTouchListener {
 				thread.unpause();
 			} else if (pointerState == POINTER_STATE_LAUNCHING) {
 				// Launch a new satellite.
-				PointF motionEndPos = new PointF(event.getX(), event.getY());
-				PointF v = new PointF(
+				motionEndPos.set(event.getX(), event.getY());
+				motionVelocity.set(
 						(motionEndPos.x - motionStartPos.x) / BattleSats.DRAG_VELOCITY_RATIO,
 						(motionEndPos.y - motionStartPos.y) / BattleSats.DRAG_VELOCITY_RATIO);
-				thread.launchSat(thread.toInternalCoords(motionStartPos), v);
+				thread.launchSat(thread.toInternalCoords(motionStartPos), motionVelocity);
 			}
 			pointerState = POINTER_STATE_IDLE;
+			thread.hideTrace();
 		}
 		return true;
 	}

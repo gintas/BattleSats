@@ -70,6 +70,9 @@ public class BattleThread extends Thread {
 	private Paint healthBarEmptyPaint = new Paint();
 	private Paint reserveSatellitesNumPaint = new Paint();
 
+	private Tracer tracer;
+	private boolean traceVisible = false;
+	
 	private Vibrator vibrator;
 
     public BattleThread(SurfaceHolder surfaceHolder, Context context) {
@@ -79,6 +82,8 @@ public class BattleThread extends Thread {
         
 		vibrator = (Vibrator)mContext.getSystemService(Context.VIBRATOR_SERVICE);
 
+		tracer = new Tracer();
+		
         Resources res = context.getResources();
         // load background image as a Bitmap instead of a Drawable b/c
         // we don't need to transform it and it's faster to draw this way
@@ -287,10 +292,16 @@ public class BattleThread extends Thread {
 				BattleSats.EARTH_RADIUS, BattleSats.EARTH_RADIUS);
 		mEarth.draw(canvas);
 		
+		// Draw fliers.
 		synchronized (fliers) {
 			for (Flier flier : fliers) {
 				flier.draw(canvas);
 			}
+		}
+		
+		// Draw trace.
+		if (traceVisible && reserveSatellites > 0) {
+			tracer.drawTrace(canvas);
 		}
 
 		canvas.restore();
@@ -301,7 +312,7 @@ public class BattleThread extends Thread {
 				mCanvasHeight - BattleSats.HEALTH_BAR_PADDING,
 				reserveSatellitesNumPaint);
 	}
-
+	
 	private void updatePhysics() {
 		long now = System.currentTimeMillis();
 		long elapsed = now - mLastTime;
@@ -372,5 +383,14 @@ public class BattleThread extends Thread {
 			addFlier(new LaserSentinel(this, position, velocity));
 			reserveSatellites--;
 		}
+	}
+
+	public void showTrace(PointF position, PointF velocity) {
+		traceVisible = true;
+		tracer.set(position, velocity);
+	}
+	
+	public void hideTrace() {
+		traceVisible = false;
 	}
 }
