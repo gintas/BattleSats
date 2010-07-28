@@ -4,13 +4,14 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
-public class EnemyBomb extends Enemy {
+public class EnemyBomb extends Flier {
 	
 	protected Paint bombPaint = new Paint();
 	
 	public EnemyBomb(BattleThread thread, float mass, PointF position,
 			PointF velocity) {
 		super(thread, position, velocity);
+		this.type = TYPE_ENEMY;
 		health = BattleSats.BOMB_HEALTH;
 		bombPaint.setAntiAlias(true);
 		bombPaint.setARGB(255, 255, 0, 0);

@@ -347,15 +347,15 @@ public class BattleThread extends Thread {
 		return new PointF((p.x - mCanvasWidth / 2) / mVisualScale, (p.y - mCanvasHeight / 2) / mVisualScale);
 	}
 	
-	public Enemy findNearestEnemy(PointF p) {
-		float nearest_d = 1000000.0f;
-		Enemy nearest = null;
+	public Flier findNearestFlier(PointF p, int type) {
+		float nearest_d = 100000000.0f;
+		Flier nearest = null;
 		for (Flier flier : fliers) {
-			if (flier instanceof Enemy) {
+			if (flier.type == type) {
 				float d = PointF.length(flier.position.x - p.x, flier.position.y - p.y);
 				if (d < nearest_d) {
 					nearest_d = d;
-					nearest = (Enemy)flier;
+					nearest = flier;
 				}
 			}
 		}

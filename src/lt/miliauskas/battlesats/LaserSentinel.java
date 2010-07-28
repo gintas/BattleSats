@@ -23,6 +23,7 @@ public class LaserSentinel extends Flier {
 	
 	public LaserSentinel(BattleThread thread, PointF position, PointF velocity) {
 		super(thread, position, velocity);
+		this.type = TYPE_FRIEND;
 		
 		bodyPaint.setAntiAlias(true);
 		bodyPaint.setARGB(255, (state == STATE_IDLE) ? 120 : 255, 180, 0);
@@ -60,7 +61,7 @@ public class LaserSentinel extends Flier {
 		super.updatePosition(elapsed);
 		
 		state = STATE_IDLE;
-		target = thread.findNearestEnemy(position);
+		target = thread.findNearestFlier(position, TYPE_ENEMY);
 		if (target != null) {
 			float dist = PointF.length(target.position.x - position.x, target.position.y - position.y);
 			if (dist <= range) {

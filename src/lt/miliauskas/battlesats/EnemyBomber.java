@@ -7,7 +7,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
-public class EnemyBomber extends Enemy {
+public class EnemyBomber extends Flier {
 
 	protected RectF ovalFrame = new RectF();
 	protected Paint bomberPaint = new Paint();
@@ -16,6 +16,7 @@ public class EnemyBomber extends Enemy {
 
 	public EnemyBomber(BattleThread thread, PointF position, PointF velocity) {
 		super(thread, position, velocity);
+		this.type = TYPE_ENEMY;
 		bomberPaint.setAntiAlias(true);
 		bomberPaint.setARGB(255, 128, 0, 128);
 		health = BattleSats.BOMBER_HEALTH;

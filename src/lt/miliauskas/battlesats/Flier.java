@@ -15,6 +15,12 @@ public abstract class Flier {
 	protected float health = 1.0f;
 	
 	protected BattleThread thread;
+	
+	public static final int TYPE_FRIEND = 1;
+	public static final int TYPE_ENEMY = 2;
+	public static final int TYPE_OTHER = 3;
+	
+	protected int type;;  
 
 	public Flier(BattleThread thread, PointF position, PointF velocity) {
 		this.thread = thread;
