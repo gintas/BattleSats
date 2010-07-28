@@ -34,6 +34,7 @@ public class LaserWeapon {
 	 * 
 	 */
 	public void rotateCanvas(Canvas canvas) {
+		// XXX Separating rotateCanvas from draw is bug-prone.
 		if (target != null) {
 			float d_x = target.position.x - flier.position.x;
 			float d_y = target.position.y - flier.position.y;
@@ -57,6 +58,7 @@ public class LaserWeapon {
 	
 	public void doDamage(long elapsed, int enemyType) {
 		state = STATE_IDLE;
+		// TODO: try to hold onto current target before looking for a new one
 		target = flier.thread.findNearestFlier(flier.position, enemyType);
 		if (target != null) {
 			float dist = PointF.length(target.position.x - flier.position.x, target.position.y - flier.position.y);
